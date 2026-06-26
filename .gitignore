@@ -33,3 +33,6 @@ next-env.d.ts
 
 # large handoff archive (not part of the app)
 *.zip
+
+# local Claude Code settings (machine-specific)
+.claude/settings.local.json
