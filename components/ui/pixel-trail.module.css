@@ -1,0 +1,21 @@
+.stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pixel {
+  position: absolute;
+  pointer-events: none;
+  opacity: 1;
+}
+
+@keyframes fadeKf {
+  to { opacity: 0; }
+}
+
+@keyframes flashKf {
+  0%, 99% { opacity: 1; }
+  100% { opacity: 0; }
+}

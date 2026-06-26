@@ -1,0 +1,52 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   THEME ROOT — Editorial CQ quiz. Pink anchor color, photo-driven verticals.
+   Theme attribute kept on <html> so existing :global selectors still work.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* Column, not row: the page stacks grid + site footer vertically. (The row
+   default silently collapsed the grid once a footer sibling was added.) */
+html[data-theme="3"] [data-layout="editorial"] { display: flex !important; flex-direction: column; }
+
+html[data-theme="3"], html[data-theme="3"] body { background: #000000; }
+
+html[data-theme="3"] {
+  --ink: #000000;
+  --ink-elev: #0A0A0A;
+  --ink-deeper: #000000;
+  --paper: #000000;
+  --paper-elev: #0A0A0A;
+  --gold: #FFFFFF;
+  --gold-hi: #FFFFFF;
+  --gold-deep: #CCCCCC;
+  --red-stamp: #FF1F2E;
+
+  --text-on-ink: #FFFFFF;
+  --text-on-ink-dim: rgba(255, 255, 255, 0.62);
+  --text-on-ink-faint: rgba(255, 255, 255, 0.36);
+
+  --border-on-ink: rgba(255, 255, 255, 0.15);
+  --border-on-ink-strong: rgba(255, 255, 255, 0.32);
+
+  /* ─── CQ palette extension (council seat 7) ─── */
+  /* Pink — primary anchor. Used for timer, frame, mission ring progress arc. */
+  --cq-pink: #00FF85;
+
+  /* Cinnabar — wrong / danger. Slight magenta lean so it sits next to pink. */
+  --cq-red: #FF453A;
+  --cq-red-deep: #A8142E;
+
+  /* Bodega — correct / success. Desaturated cool green: supports pink, doesn't compete. */
+  --cq-green: #30D158;
+  --cq-green-deep: #1E7A4C;
+
+  /* Filament — warning / amber tier of streak danger. */
+  --cq-amber: #FFB534;
+
+  /* Newsprint — warm off-white. Use when a third surface layer is needed
+     next to pure white cards (kills retinal vibration from pink halation). */
+  --cq-newsprint: #E8E4DC;
+}
+
+html[data-theme="3"] body::before { background: none; }
+
+html[data-theme="3"] ::selection { background: #FFFFFF; color: #000000; }

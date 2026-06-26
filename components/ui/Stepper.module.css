@@ -1,0 +1,186 @@
+.outer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.indicatorRow {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  padding: 8px 0 28px;
+}
+
+.indicator {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  outline: none;
+  padding: 0;
+  font-family: var(--font-inter), Inter, sans-serif;
+  transition:
+    background var(--dur-hover) var(--ease-apple-standard),
+    border-color var(--dur-hover) var(--ease-apple-standard),
+    color var(--dur-hover) var(--ease-apple-standard),
+    transform var(--dur-release) var(--ease-apple-spring);
+  will-change: transform;
+}
+.indicator:active { transform: scale(0.92); }
+
+.indicator_inactive {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.55);
+}
+.indicator_active {
+  /* yellow = "you are here" (gaming-signal ramp) */
+  background: rgba(255, 214, 10, 0.12);
+  border-color: #ffd60a;
+  color: #ffd60a;
+}
+.indicator_complete {
+  /* white chrome (user call) — black pixel check on white */
+  background: #fff;
+  border-color: #fff;
+  color: #000;
+}
+
+.activeBlock {
+  width: 14px;
+  height: 14px;
+  background: #ffd60a;
+  display: block;
+}
+
+.stepNum {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.connector {
+  position: relative;
+  flex: 1;
+  height: 2px;
+  margin: 0 10px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+.connectorFill {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: translateX(-100%);
+  transition: transform 380ms var(--spring-clean);
+}
+.connectorFillActive {
+  transform: translateX(0);
+}
+
+.contentWrap {
+  position: relative;
+  overflow: hidden;
+  min-height: 180px;
+}
+
+.slide {
+  width: 100%;
+  animation-fill-mode: both;
+}
+
+/* Direction-aware slide-in. Key on currentStep re-mounts the slide div,
+   restarting the keyframe — gives smooth swap-in feel. */
+.slideEnterRight {
+  animation: slide-enter-right 360ms var(--spring-clean);
+}
+.slideEnterLeft {
+  animation: slide-enter-left 360ms var(--spring-clean);
+}
+
+@keyframes slide-enter-right {
+  from { transform: translateX(20%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+@keyframes slide-enter-left {
+  from { transform: translateX(-20%); opacity: 0; }
+  to   { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slideEnterRight,
+  .slideEnterLeft { animation: none; }
+}
+
+.step {
+  padding: 4px 4px 12px;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  gap: 12px;
+}
+.footerSpread { justify-content: space-between; }
+.footerEnd { justify-content: flex-end; }
+
+.backBtn {
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.55);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 10px 6px;
+  border-radius: 4px;
+  transition:
+    transform var(--dur-release) var(--ease-apple-spring),
+    color var(--dur-hover) var(--ease-apple-standard);
+  will-change: transform;
+}
+.backBtn:hover { color: #fff; }
+.backBtn:active {
+  transform: scale(0.96);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+
+.nextBtn {
+  background: var(--accent);
+  border: 0;
+  color: #000;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 14px 28px;
+  border-radius: 0;
+  transition:
+    transform var(--dur-release) var(--ease-apple-spring),
+    background var(--dur-hover) var(--ease-apple-standard);
+  will-change: transform;
+}
+.nextBtn:hover { background: #E6E6E6; }
+.nextBtn:active {
+  transform: scale(0.965);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+.nextBtn:focus-visible,
+.backBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}

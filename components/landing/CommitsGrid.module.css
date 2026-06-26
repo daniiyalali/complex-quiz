@@ -1,0 +1,64 @@
+.grid {
+  display: grid;
+  width: 100%;
+  max-width: 36rem;
+  gap: 4px;
+  padding: 12px;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: var(--l-r-card);
+  box-shadow: var(--l-shadow-md);
+}
+
+.cell {
+  aspect-ratio: 1 / 1;
+  width: 100%;
+  height: 100%;
+  border-radius: 3px;
+  background: var(--l-surface-3);
+}
+
+/* Lit cells cycle the green commit palette set per-cell via --highlight. */
+.highlight {
+  background: var(--highlight, #48d55d);
+  animation: cgHighlight 1.6s ease-in-out infinite alternate;
+}
+
+/* A few non-lit cells flash a faint green pulse. */
+.flash {
+  animation: cgFlash 2.4s ease-in-out infinite;
+}
+
+@keyframes cgHighlight {
+  0% {
+    background: #0d4429;
+    transform: scale(0.92);
+  }
+  50% {
+    background: #016d32;
+  }
+  100% {
+    background: var(--highlight, #48d55d);
+    transform: scale(1);
+  }
+}
+
+@keyframes cgFlash {
+  0%,
+  100% {
+    background: var(--l-surface-3);
+  }
+  50% {
+    background: rgba(72, 213, 93, 0.35);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .highlight,
+  .flash {
+    animation: none;
+  }
+  .highlight {
+    background: var(--highlight, #48d55d);
+  }
+}

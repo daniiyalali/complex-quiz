@@ -1,0 +1,240 @@
+/* Badge catalog — grouped milestones grid + per-family tier ladders.
+   Lives inside the StreakDrawer "all" view (panel = --surface), so cards rise
+   to --surface-2 per the Apple elevation ladder. */
+
+.catalog {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-top: 4px;
+}
+
+/* ── Header counter + overall progress ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.counter {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.counterNum {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+.counterOf {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--surface-2);
+  overflow: hidden;
+}
+.barFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--correct, #00ff85);
+  transition: width 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Sections ── */
+.section {
+  display: flex;
+  flex-direction: column;
+}
+.eyebrow {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 14px;
+}
+
+/* ── Milestones grid (6 one-time badges) ── */
+.mGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px 8px;
+  justify-items: center;
+}
+.mTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  min-width: 0;
+}
+.mRing {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mName {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--text);
+}
+.mCrit {
+  font-size: 9px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text-2);
+  padding: 0 2px;
+}
+
+/* ── Tier-ladder cards (5 families) ── */
+.ladders {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.card {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-card, 16px);
+  padding: 14px;
+}
+.cardHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.cardIcon {
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cardText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.cardName {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+}
+.cardCrit {
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--text-2);
+}
+
+.ladder {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 6px;
+}
+.node {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  min-width: 0;
+}
+.nodeIcon {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Earned tiers full colour; locked desaturated; current glows green. */
+.node[data-state="locked"] .nodeIcon {
+  filter: grayscale(1);
+  opacity: 0.42;
+}
+.node[data-state="current"] .nodeIcon {
+  filter: drop-shadow(0 0 7px rgba(255, 214, 10, 0.5));
+}
+/* Medallion shows colour ONLY when the ring is complete (tier earned). The
+   in-progress (current) and locked medallions stay black & white — the ring
+   carries the signal colour — matching the Milestone rings. */
+.tierMark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tierMarkDim {
+  filter: grayscale(1);
+  transition: filter 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* Gauge fills the 52px node box (overrides the ported component's 10rem). */
+.tierGauge {
+  width: 100%;
+  height: 100%;
+  font-size: inherit;
+  font-weight: inherit;
+}
+.lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  opacity: 0.92;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.7));
+}
+.now {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--correct, #00ff85);
+  color: #001b0e;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  padding: 1px 5px;
+  border-radius: 3px;
+  line-height: 1.2;
+}
+.nodeLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-2);
+}
+.node[data-state="locked"] .nodeLabel {
+  color: var(--text-3);
+}
+.node[data-state="current"] .nodeLabel {
+  color: var(--correct, #00ff85);
+}
+
+.nextHint {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--border);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+}

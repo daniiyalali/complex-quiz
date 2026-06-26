@@ -1,0 +1,431 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   BadgeUnlockedPopup — CQ Apple Dark v3 Section 6
+   8-step orchestrated unlock sequence
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Root overlay ─────────────────────────────────────────────────────────── */
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+/* ── Backdrop ─────────────────────────────────────────────────────────────── */
+/* NOTE: intentionally NO backdrop-filter here. On iOS Safari a `backdrop-filter`
+   element leaves a stale rasterized "ghost" dim painted over whatever renders
+   next when it unmounts (only a recomposite / resize clears it) — which is
+   exactly what happened on the Results screen after tapping SEE RESULTS. A
+   solid dim over our already-dark UI looks nearly identical and can't ghost. */
+.backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  transition: opacity var(--dur-normal) var(--spring-clean);
+  pointer-events: auto;
+  cursor: default;
+}
+.mounted .backdrop {
+  opacity: 1;
+}
+
+/* Lighter dim when a WebGL background is active so the layer beneath shows. */
+.rootBackdrop .backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+/* Claim flow over a bright surface: near-opaque scrim so the page is hidden,
+   while the pixel-blast still reads on top. Placed after .rootBackdrop to win. */
+.rootSolidScrim .backdrop {
+  background: rgba(0, 0, 0, 0.93);
+}
+
+/* WebGL background canvas layer — sits above the backdrop, below content. */
+.bgLayer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 500ms var(--spring-clean);
+  z-index: 0;
+}
+.mounted .bgLayer {
+  opacity: 1;
+}
+
+/* ── Exit transition — graceful fade-out before unmount. (The iOS ghost itself
+   is prevented by not using backdrop-filter at all; see .backdrop above.) ── */
+.closing .backdrop {
+  opacity: 0;
+  transition: opacity 240ms var(--ease-dismiss);
+}
+.closing .bgLayer,
+.closing .content {
+  opacity: 0;
+  transition: opacity 180ms var(--ease-dismiss);
+}
+
+/* ── Centered content column ──────────────────────────────────────────────── */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  pointer-events: none;
+  width: min(400px, 92vw);
+  padding: env(safe-area-inset-top, 16px) 0 env(safe-area-inset-bottom, 16px);
+}
+
+/* ── Step 1 — BADGE UNLOCKED chip ─────────────────────────────────────────── */
+.chip {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--accent);
+  /* Solid surface so the chip stays readable when a WebGL background
+     (rays, pixels) is animating behind the popup. Magenta border + soft
+     halo keep the on-brand celebratory feel. */
+  background: var(--surface);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  padding: 6px 16px;
+  margin-bottom: 28px;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.22);
+  opacity: 0;
+  transform: translateY(-6px);
+  transition:
+    opacity 300ms var(--spring-clean),
+    transform 300ms var(--spring-clean);
+}
+.chipVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── Steps 2–6 — Badge stage ──────────────────────────────────────────────── */
+.badgeStage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Fixed size on mobile + desktop so the badge art reads at a consistent
+     scale. The rotating ring extends outward via negative inset, not via
+     a larger badgeStage. */
+  width: 220px;
+  height: 220px;
+  margin-bottom: 32px;
+  /* Overflow visible so the ring + isolator + spark bursts bleed out */
+  overflow: visible;
+}
+
+/* ── Step 5 — Ring pulses ────────────────────────────────────────────────── */
+.ring1,
+.ring2 {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ring1 {
+  border: 1.5px solid var(--accent);
+}
+.ring2 {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.ring1Active {
+  animation: ringPulse1 720ms var(--spring-clean) forwards;
+}
+.ring2Active {
+  animation: ringPulse2 940ms var(--spring-clean) 130ms forwards;
+}
+
+@keyframes ringPulse1 {
+  0%   { transform: scale(1.18); opacity: 0.9; }
+  100% { transform: scale(2.9);  opacity: 0; }
+}
+@keyframes ringPulse2 {
+  0%   { transform: scale(1.18); opacity: 0.5; }
+  100% { transform: scale(3.7);  opacity: 0; }
+}
+
+/* ── Step 2+4+6 — Badge circle (glow + flash applied inline) ──────────────── */
+.badgeCircle {
+  position: relative;
+  /* Badge media intentionally smaller than the badgeStage so there's
+     visible breathing room between the badge edge and the rotating ring
+     (which sits at the stage's outer perimeter, inset -6). Adjust this
+     percentage to tune the gap without touching the ring. */
+  width: 75%;
+  height: 75%;
+  border-radius: 50%;
+  background: var(--surface);
+  overflow: hidden;
+  z-index: 2;
+  /* Static border + glow removed — the rotating .badgeRing handles the
+     border treatment now. Glow comes back via inline `boxShadow` on the
+     landing flash + glow-settle steps. */
+}
+
+/* ── Isolator disk — solid dark backdrop that fills the gap between the
+   (smaller) badge and the ring, so the WebGL pixel pattern can't bleed
+   into the empty space inside the ring. */
+.badgeIsolator {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--bg) 0%,
+    var(--bg) 75%,
+    rgba(0, 0, 0, 0.65) 92%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Rotating magenta gradient ring — continuous 360° spin. Diameter
+   and stroke unchanged from the original tight ring; the visible gap
+   between badge and ring is achieved by shrinking the badge media
+   (see .badgeCircle), not by enlarging the ring. */
+.badgeRing {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(255, 255, 255, 0) 0deg,
+    var(--accent) 70deg,
+    rgba(255, 255, 255, 0.35) 180deg,
+    var(--accent) 290deg,
+    rgba(255, 255, 255, 0) 360deg
+  );
+  -webkit-mask: radial-gradient(circle, transparent 67%, #000 68%);
+          mask: radial-gradient(circle, transparent 67%, #000 68%);
+  animation: badgeRingSpin 3.6s linear infinite;
+  z-index: 1;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.45));
+}
+
+@keyframes badgeRingSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Step 2 — Badge entrance (transform applied inline) ───────────────────── */
+.badgeEntrance {
+  width: 100%;
+  height: 100%;
+  /* Opacity transition for initial fade-in during rotation */
+  will-change: transform, opacity;
+}
+
+.badgeMedia {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
+  /* No image-rendering: pixelated here — badge PNGs are smooth artwork.
+     Applies to both <img> and <video> elements. */
+}
+
+/* ── Step 7 — Info card ───────────────────────────────────────────────────── */
+.infoCard {
+  width: 100%;
+  background: var(--surface);
+  border: 0.5px solid rgba(84, 84, 88, 0.30);
+  border-radius: var(--radius-card);
+  padding: 20px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 20px;
+  pointer-events: auto;
+
+  opacity: 0;
+  transform: translateY(18px);
+  transition:
+    opacity 340ms var(--spring-clean),
+    transform 340ms var(--spring-clean);
+}
+.infoCardVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.badgeName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--accent);
+  margin: 0 0 6px;
+  text-align: center;
+}
+
+.badgeDesc {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: rgba(235, 235, 245, 0.55);
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+
+.divider {
+  width: 100%;
+  height: 0.5px;
+  background: rgba(84, 84, 88, 0.35);
+  margin-bottom: 16px;
+}
+
+/* ── Stat chips ───────────────────────────────────────────────────────────── */
+.chipRow {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
+
+.statChip {
+  background: var(--surface-2);
+  border-radius: var(--radius-btn);
+  padding: 10px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 72px;
+}
+
+.statNum {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: rgba(235, 235, 245, 0.40);
+  text-transform: uppercase;
+}
+
+/* ── Step 8 — Continue button ─────────────────────────────────────────────── */
+.continueBtn {
+  pointer-events: auto;
+  background: var(--accent);
+  border: 0;
+  color: #000;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0;
+  cursor: pointer;
+  padding: 14px 28px;
+  border-radius: var(--radius-btn);
+  text-transform: uppercase;
+  min-width: 220px;
+  width: 100%;
+
+  opacity: 0;
+  transition:
+    opacity 260ms var(--spring-clean),
+    transform var(--dur-snap) var(--spring-snap),
+    background var(--dur-snap) var(--spring-clean);
+  will-change: transform, opacity;
+}
+.continueBtnVisible {
+  opacity: 1;
+}
+.continueBtn:hover {
+  background: #E6E6E6;
+}
+.continueBtn:active {
+  transform: scale(0.965);
+  transition:
+    opacity 260ms var(--spring-clean),
+    transform 100ms var(--ease-dismiss),
+    background var(--dur-snap) var(--spring-clean);
+}
+.continueBtn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ── Desktop spacing — more breathing room on wider viewports ────────────── */
+@media (min-width: 768px) {
+  .content {
+    width: min(440px, 92vw);
+    gap: 8px;
+  }
+  .chip {
+    font-size: 12px;
+    padding: 6px 16px;
+    margin-bottom: 40px;
+  }
+  .badgeStage {
+    margin-bottom: 44px;
+  }
+  .infoCard {
+    padding: 28px 28px 22px;
+    margin-bottom: 28px;
+    gap: 4px;
+  }
+  .badgeName {
+    font-size: 19px;
+    margin: 0 0 8px;
+  }
+  .subtitle {
+    font-size: 14px;
+  }
+  .continueBtn {
+    padding: 14px 32px;
+    font-size: 15px;
+    min-width: 220px;
+  }
+}
+
+/* ── Reduced motion ───────────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .backdrop,
+  .chip,
+  .infoCard,
+  .continueBtn {
+    transition: none;
+  }
+
+  .ring1Active,
+  .ring2Active {
+    animation: none;
+  }
+
+  /* Show everything immediately */
+  .chip {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .infoCard {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .continueBtn {
+    opacity: 1;
+  }
+}

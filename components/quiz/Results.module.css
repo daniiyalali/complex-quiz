@@ -1,0 +1,1428 @@
+.shell {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  color: #fff;
+  overflow-y: auto;
+  padding: 28px 0 80px;
+}
+
+.inner {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  color: #000;
+  padding: 10px 18px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0;
+  font-size: 12px;
+  z-index: 200;
+  text-transform: uppercase;
+  animation: toast-in 0.3s var(--spring-clean);
+}
+@keyframes toast-in {
+  from { transform: translate(-50%, 20px); opacity: 0; }
+  to   { transform: translate(-50%, 0); opacity: 1; }
+}
+
+/* ─── Hero ─── */
+.heroBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding-top: 8px;
+}
+.todayLabel {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0;
+  color: #FFCC00;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.score {
+  font-family: var(--font-anton), "Anton", sans-serif;
+  font-size: clamp(82px, 18vw, 144px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  display: inline-flex;
+  align-items: baseline;
+}
+.scoreSlash { opacity: 0.5; }
+.time {
+  font-family: var(--font-anton), "Anton", sans-serif;
+  font-size: clamp(32px, 8vw, 56px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.timeUnit {
+  font-family: var(--font-mono);
+  font-size: 0.32em;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+}
+
+/* ─── Stats grid ─── */
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.statBox {
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px 6px;
+  text-align: center;
+}
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4vw, 22px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+.statValueAccent { color: #FFCC00; }
+.statLabel {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 5px;
+}
+
+/* ─── Badge ─── */
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1.5px solid #FFCC00;
+  background: rgba(255, 204, 0, 0.04);
+  padding: 12px 14px;
+}
+.badgeArt {
+  width: 44px;
+  height: 44px;
+  border: 2px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.badge_white { color: #fff; background: rgba(255, 255, 255, 0.06); }
+.badge_bronze { color: #cd7f32; background: rgba(205, 127, 50, 0.08); }
+.badge_silver { color: #c0c0c0; background: rgba(192, 192, 192, 0.08); }
+.badge_gold { color: #FFCC00; background: rgba(255, 204, 0, 0.10); }
+.badge_platinum { color: #00ffd1; background: rgba(0, 255, 209, 0.08); }
+.badgeLocked { filter: grayscale(1) opacity(0.5); }
+
+.badgeBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.badgeKicker {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0;
+  color: #FFCC00;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.badgeName {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+}
+.badgeRate {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.badgeView {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.20);
+  padding: 7px 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: color 160ms, border-color 160ms;
+}
+.badgeView:hover { color: #fff; border-color: #fff; }
+
+/* ─── Share controls ─── */
+.shareGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+.btnFilled {
+  background: #fff;
+  color: #000;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 13px 14px;
+  border: 2px solid #fff;
+  transition: background 160ms, color 160ms, transform 140ms;
+  cursor: pointer;
+}
+.btnFilled:hover { background: #000; color: #fff; }
+.btnFilled:active { transform: scale(0.98); }
+
+.shareMeta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.metaPill {
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  font-weight: 700;
+  transition: color 160ms, border-color 160ms;
+  text-transform: uppercase;
+}
+.metaPill:hover { color: #fff; border-color: #fff; }
+.metaSep { opacity: 0.4; }
+
+.btnOutline {
+  background: transparent;
+  color: #fff;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  font-size: 11px;
+  padding: 13px 14px;
+  border: 2px solid #fff;
+  transition: background 160ms, color 160ms, transform 140ms;
+  cursor: pointer;
+}
+.btnOutline:hover { background: #fff; color: #000; }
+.btnOutline:active { transform: scale(0.98); }
+
+/* ─── Review ─── */
+.reviewBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.reviewKicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.review {
+  background: rgba(255, 255, 255, 0.025);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.reviewRow {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 8px;
+  align-items: start;
+}
+.reviewNum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0;
+}
+.reviewBody {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.reviewQ {
+  font-family: var(--font-display);
+  font-size: 12.5px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #fff;
+}
+.reviewAnswer {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
+.reviewMark { color: var(--cq-green, #30D158); }
+.reviewMarkWrong { color: var(--cq-red, #FF453A); }
+.reviewLetter { color: rgba(255, 255, 255, 0.45); width: 12px; }
+.reviewRight { color: var(--cq-green, #30D158); }
+.reviewWrong { color: var(--cq-red, #FF453A); flex: 1; }
+.reviewYou {
+  color: var(--cq-red, #FF453A);
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
+/* ─── Sentiment ─── */
+.sentBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.sentKicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.sentBox {
+  background: rgba(255, 255, 255, 0.025);
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+.sentSlider {
+  width: 100%;
+  accent-color: #FFCC00;
+}
+.sentLabels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.sentActive { color: #FFCC00 !important; }
+
+/* ─── Email opt-in ─── */
+.emailRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.20);
+  background: rgba(255, 255, 255, 0.025);
+  padding: 12px 12px;
+}
+.emailInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.20);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 6px 0;
+  outline: none;
+}
+.emailInput::placeholder { color: rgba(255, 255, 255, 0.35); }
+.emailBtn {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: #FFCC00;
+  border: 1.5px solid #FFCC00;
+  padding: 7px 10px;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 160ms, color 160ms;
+}
+.emailBtn:hover { background: #FFCC00; color: #000; }
+
+/* ─── Tomorrow ─── */
+.tomorrow {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0;
+  color: #FFCC00;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 8px 0;
+}
+
+.linkBtn,
+.linkBtnSub {
+  display: block;
+  margin: 0 auto;
+  background: none;
+  border: none;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  transition: color 160ms;
+}
+.linkBtn:hover { color: #fff; }
+.linkBtnSub { color: rgba(255, 255, 255, 0.30); }
+.linkBtnSub:hover { color: rgba(255, 255, 255, 0.6); }
+
+/* ═══════════ OPTION 3 — EDITORIAL (sneaker bg + two-column bento grid) ═══════════ */
+:global(html[data-theme="3"]) .shell {
+  background: var(--bg) !important;
+  min-height: 100dvh;
+  /* top clears the fixed Complex Playground bar (56px) */
+  padding: calc(56px + clamp(12px, 2vh, 20px)) clamp(12px, 1.6vw, 20px) clamp(12px, 2vh, 20px) !important;
+  display: block;
+  position: relative;
+  overflow: visible;
+  animation: results-in 480ms var(--spring-clean);
+}
+@keyframes results-in {
+  from { opacity: 0; transform: translateY(8px); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
+/* NOTE: the results screen NEVER locks to the viewport — the answer review is
+   variable-length (5 questions, wrapping text), so a fixed-height
+   `overflow:hidden` box would clip the last rows (it did — twice). The shell
+   always flows: `min-height:100dvh; overflow:visible`, the document scrolls.
+   See AGENTS.md → "Variable-length content never goes in a clipped box". */
+
+/* Sneaker bg */
+:global(html[data-theme="3"]) .shell::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("/figma/question-bg.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.45;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Two-column grid wrapper — full-bleed, asymmetric, viewport-locked bento at desktop */
+:global(html[data-theme="3"]) .eGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  max-width: none;
+  position: relative;
+  z-index: 2;
+  align-items: stretch;
+}
+@media (min-width: 1024px) {
+  :global(html[data-theme="3"]) .eGrid {
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr);
+  }
+}
+/* (eGrid height-lock removed — the grid grows with the scorecard; the
+   leaderboard rail stays in view via position:sticky, see .rail.) */
+
+/* Left column — dark card, scrollable inside its bento cell */
+:global(html[data-theme="3"]) .inner {
+  position: relative;
+  z-index: 2;
+  background: var(--surface);
+  color: var(--text);
+  max-width: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 18px clamp(22px, 3vw, 44px) clamp(22px, 3vw, 36px);
+  gap: clamp(10px, 1.2vh, 16px);
+  max-height: none;
+  overflow-y: visible;
+  border: 0.5px solid rgba(84, 84, 88, 0.30);
+  border-radius: var(--radius-sheet);
+  display: flex;
+  flex-direction: column;
+}
+/* Bleed the header's bottom rule edge-to-edge of the card */
+:global(html[data-theme="3"]) .eHead {
+  margin-left: calc(-1 * clamp(22px, 3vw, 44px));
+  margin-right: calc(-1 * clamp(22px, 3vw, 44px));
+  padding-left: clamp(22px, 3vw, 44px);
+  padding-right: clamp(22px, 3vw, 44px);
+}
+@media (min-width: 1024px) {
+  /* Height-matched to the leaderboard rail (same calc), pinned with sticky,
+     and — critically — `overflow-y: auto` so a longer scorecard SCROLLS
+     INSIDE the column instead of being clipped. (This is the safe version of
+     a viewport-height column: a real scroll, never `overflow: hidden`.) */
+  :global(html[data-theme="3"]) .inner {
+    align-self: start;
+    position: sticky;
+    top: calc(56px + 16px);
+    height: calc(100dvh - 56px - 32px);
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+  }
+}
+:global(html[data-theme="3"]) .inner::-webkit-scrollbar { width: 6px; }
+:global(html[data-theme="3"]) .inner::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.18); }
+
+/* Toast — keep readable on dark */
+:global(html[data-theme="3"]) .toast {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Hero */
+:global(html[data-theme="3"]) .heroBlock {
+  text-align: center;
+  align-items: center;
+  gap: 6px;
+  padding-top: 4px;
+}
+:global(html[data-theme="3"]) .todayLabel {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: 12px;
+  letter-spacing: 0;
+  color: var(--text-3) !important;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+:global(html[data-theme="3"]) .score {
+  font-family: var(--font-doto), Doto, monospace !important;
+  font-size: clamp(56px, 9vw, 96px) !important;
+  font-weight: 900;
+  color: var(--text) !important;
+  letter-spacing: 0;
+  text-shadow: none;
+  line-height: 0.9;
+}
+:global(html[data-theme="3"]) .scoreSlash {
+  color: var(--text-3) !important;
+  opacity: 1;
+}
+:global(html[data-theme="3"]) .time {
+  font-family: var(--font-doto), Doto, monospace !important;
+  font-size: clamp(22px, 3.4vw, 36px);
+  color: var(--text) !important;
+  text-shadow: none;
+  font-weight: 900;
+}
+:global(html[data-theme="3"]) .timeUnit {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+  font-size: 0.30em;
+  letter-spacing: 0;
+}
+/* Stats grid */
+:global(html[data-theme="3"]) .statsGrid {
+  gap: 0;
+  margin: 4px 0 0 0;
+  border: 0.5px solid var(--divider);
+}
+:global(html[data-theme="3"]) .statBox {
+  border: none !important;
+  border-right: 0.5px solid var(--divider) !important;
+  background: transparent !important;
+  padding: 10px 6px;
+}
+:global(html[data-theme="3"]) .statBox:last-child { border-right: none !important; }
+:global(html[data-theme="3"]) .statValue {
+  font-family: var(--font-doto), Doto, monospace !important;
+  color: var(--text) !important;
+  font-size: clamp(16px, 2vw, 22px);
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .statValueAccent { color: var(--accent) !important; }
+:global(html[data-theme="3"]) .statLabel {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+  font-size: 9px;
+  letter-spacing: 0;
+}
+
+/* Badge row */
+:global(html[data-theme="3"]) .badgeRow {
+  border: 0.5px solid var(--border);
+  background: transparent;
+  padding: 10px 12px;
+}
+:global(html[data-theme="3"]) .badgeKicker {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+}
+:global(html[data-theme="3"]) .badgeName {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text) !important;
+  text-transform: uppercase;
+}
+:global(html[data-theme="3"]) .badgeRate {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+}
+:global(html[data-theme="3"]) .badgeView {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  border: 0 !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+}
+:global(html[data-theme="3"]) .badgeView:hover {
+  background: #E6E6E6 !important;
+  color: var(--bg) !important;
+}
+
+/* PRIMARY: View Leaderboard — big and obvious */
+:global(html[data-theme="3"]) .btnOutline {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+  border: none !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 18px 24px;
+  width: 100%;
+  border-radius: var(--radius-btn);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: background 150ms var(--ease-out, ease-out), transform 150ms var(--ease-out, ease-out);
+}
+:global(html[data-theme="3"]) .btnOutline::before { content: none; }
+:global(html[data-theme="3"]) .btnOutline:hover {
+  background: #E6E6E6 !important;
+  transform: scale(1.01);
+}
+
+/* SECONDARY: Share — smaller, side-by-side */
+:global(html[data-theme="3"]) .shareGrid { gap: 4px; }
+:global(html[data-theme="3"]) .btnFilled {
+  background: transparent !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 10px 8px;
+  letter-spacing: 0;
+  border-radius: var(--radius-btn);
+}
+:global(html[data-theme="3"]) .btnFilled:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--accent) !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
+}
+:global(html[data-theme="3"]) .shareMeta {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .metaPill {
+  color: var(--accent) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  background: transparent !important;
+}
+:global(html[data-theme="3"]) .metaPill:hover {
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--accent) !important;
+}
+
+/* Compact review — only first 2 questions shown, rest scrollable */
+:global(html[data-theme="3"]) .reviewBlock { display: none; }
+:global(html[data-theme="3"]) .sentBlock { display: none; }
+:global(html[data-theme="3"]) .emailRow { display: none; }
+
+:global(html[data-theme="3"]) .tomorrow {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+  font-size: 11px;
+  letter-spacing: 0;
+  padding: 4px 0;
+  text-align: center;
+}
+
+:global(html[data-theme="3"]) .linkBtn,
+:global(html[data-theme="3"]) .linkBtnSub {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--accent) !important;
+  text-decoration: none;
+  text-underline-offset: 4px;
+}
+:global(html[data-theme="3"]) .linkBtn:hover,
+:global(html[data-theme="3"]) .linkBtnSub:hover { text-decoration: underline; }
+:global(html[data-theme="3"]) .linkBtnSub { color: rgba(255, 255, 255, 0.7) !important; }
+
+/* ─── Editorial two-column: right rail ─── */
+:global(html[data-theme="3"]) .rail {
+  background: #000;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-height: 640px;
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 1024px) {
+  /* The board is a bounded widget (it scrolls internally), so it CAN be a
+     fixed viewport height — pinned with sticky so it stays in view while the
+     variable-length scorecard scrolls the page. */
+  :global(html[data-theme="3"]) .rail {
+    align-self: start;
+    position: sticky;
+    top: calc(56px + 16px);
+    height: calc(100dvh - 56px - 32px);
+    min-height: 0;
+  }
+}
+/* Mobile: the rail is replaced by bottom sheets */
+@media (max-width: 1023px) {
+  :global(html[data-theme="3"]) .rail { display: none; }
+}
+
+/* ─── Editorial left column — scorecard ─── */
+:global(html[data-theme="3"]) .eHead {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(14px, 2.2vw, 28px);
+  font-weight: 800;
+  letter-spacing: 0;
+  color: var(--text);
+  text-align: center;
+  text-transform: uppercase;
+  line-height: 1.1;
+  padding: 12px 12px 14px;
+  border-bottom: 0.5px solid var(--divider);
+  margin-bottom: 0;
+}
+
+/* Mobile: smaller header, smaller streak stat (was wrapping to multiple lines) */
+@media (max-width: 640px) {
+  :global(html[data-theme="3"]) .eStats4 {
+    grid-template-columns: 1fr 1fr 1.25fr;
+  }
+  :global(html[data-theme="3"]) .eStatValue {
+    font-size: 38px;
+    letter-spacing: 0;
+  }
+  :global(html[data-theme="3"]) .eStatStreakValue {
+    font-size: 22px;
+    gap: 5px;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    letter-spacing: 0;
+  }
+  :global(html[data-theme="3"]) .eStatStreakFlame {
+    width: 18px;
+  }
+  :global(html[data-theme="3"]) .eStatBox {
+    padding: 12px 4px;
+  }
+  :global(html[data-theme="3"]) .eStatLabel {
+    font-size: 9px;
+    margin-top: 6px;
+    letter-spacing: 0;
+  }
+}
+
+:global(html[data-theme="3"]) .eBannerStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ─── Score hero (replaces 3-equal stats grid) ─── */
+:global(html[data-theme="3"]) .scoreHero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  /* compact — the old 1rem pad + big tiles starved the answer review */
+  padding: 0.35rem 0 0.25rem;
+}
+:global(html[data-theme="3"]) .scoreHeroNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: clamp(48px, 10vw, 64px);
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 0.9;
+  color: var(--accent);
+  display: inline-flex;
+  align-items: baseline;
+}
+/* Verdict colors — 4 tiers (Figma 326:7197):
+   5/5 #00FF85 · 4/5 #00C46A · 3–2/5 #FF9500 · 1–0/5 #FF453A. */
+:global(html[data-theme="3"]) .scoreHeroNum[data-grade="perfect"] {
+  color: #00ff85;
+  text-shadow: 0 0 22px rgba(0, 255, 133, 0.4);
+}
+:global(html[data-theme="3"]) .scoreHeroNum[data-grade="sharp"] {
+  color: #00c46a;
+  text-shadow: 0 0 22px rgba(0, 196, 106, 0.35);
+}
+:global(html[data-theme="3"]) .scoreHeroNum[data-grade="solid"] {
+  color: #ff9500;
+  text-shadow: 0 0 22px rgba(255, 149, 0, 0.35);
+}
+:global(html[data-theme="3"]) .scoreHeroNum[data-grade="rookie"] {
+  color: #ff453a;
+  text-shadow: 0 0 22px rgba(255, 69, 58, 0.35);
+}
+:global(html[data-theme="3"]) .scoreHeroSlash {
+  font-family: var(--font-doto), Doto, monospace; /* match the score number's font */
+  font-size: inherit;
+  color: var(--text-3);
+  font-weight: 900;
+}
+:global(html[data-theme="3"]) .scoreHeroLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  color: var(--text-2);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .statPillRow {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 0.4rem;
+}
+:global(html[data-theme="3"]) .statPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7em;
+  background: var(--surface-2);
+  border: 0.5px solid var(--divider);
+  border-radius: var(--radius-btn);
+  /* compact chip — the old 22/28 tile ate half the column */
+  padding: 10px 18px;
+  flex: 0 1 auto;
+  min-width: 0;
+  justify-content: center;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 0.75rem;
+  color: var(--text-2);
+  font-weight: 500;
+  white-space: nowrap;
+}
+:global(html[data-theme="3"]) .statPillValue {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 16px;
+}
+:global(html[data-theme="3"]) .statPillLabel {
+  color: var(--text-3);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .statPillFlame {
+  width: 1.5em;
+  height: auto;
+  display: inline-block;
+  image-rendering: pixelated;
+}
+
+/* Divider between score hero and CTAs */
+:global(html[data-theme="3"]) .rDivider {
+  height: 0.5px;
+  background: var(--divider);
+  margin: 0.85rem 0;
+  width: 100%;
+}
+
+:global(html[data-theme="3"]) .eRankBanner {
+  background: var(--accent);
+  color: var(--bg);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  text-align: center;
+  padding: 14px 16px;
+  margin: 0;
+}
+
+:global(html[data-theme="3"]) .eStats4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.15fr;
+  border: 0.5px solid var(--divider);
+  border-top: none;
+  margin: 0;
+}
+:global(html[data-theme="3"]) .eStatBox {
+  padding: 16px 6px;
+  text-align: center;
+  border-right: 0.5px solid var(--divider);
+}
+:global(html[data-theme="3"]) .eStatBox:last-child { border-right: none; }
+:global(html[data-theme="3"]) .eStatValue {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 56px;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: var(--text);
+  line-height: 1;
+}
+:global(html[data-theme="3"]) .eStatLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--text-3);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 8px;
+}
+
+/* Streak stat — slim retention pip alongside CORRECT / TIME.
+   Pink flame icon inline with the "+1 / N" delta number. */
+:global(html[data-theme="3"]) .eStatStreakValue {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 40px;
+  font-weight: 900;
+  letter-spacing: 0;
+  color: var(--streak);
+  line-height: 1;
+}
+:global(html[data-theme="3"]) .eStatStreakFlame {
+  width: 26px;
+  aspect-ratio: 45 / 53;
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+}
+
+:global(html[data-theme="3"]) .eReviewPct {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-3);
+  margin-top: 1px;
+  letter-spacing: 0;
+}
+
+/* ─── Editorial Answer Review — sports-page box score ─── */
+:global(html[data-theme="3"]) .eReviewBlock {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+:global(html[data-theme="3"]) .eReviewHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 4px;
+  border-bottom: 0.5px solid var(--divider);
+}
+:global(html[data-theme="3"]) .eReviewKicker {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0;
+  font-weight: 500;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+:global(html[data-theme="3"]) .eReviewDots {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-doto), Doto, monospace;
+  line-height: 1;
+}
+:global(html[data-theme="3"]) .eReviewDot {
+  font-size: 16px;
+  color: var(--text-3);
+  line-height: 1;
+}
+:global(html[data-theme="3"]) .eReviewDotOn {
+  color: var(--accent);
+}
+
+:global(html[data-theme="3"]) .eReviewList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+:global(html[data-theme="3"]) .eReviewRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px 1fr 24px;
+  align-items: center;
+  column-gap: 12px;
+  padding: 6px 2px 6px 12px;
+  border-bottom: 0.5px solid var(--divider);
+  background: var(--surface);
+  transition: background 160ms;
+}
+:global(html[data-theme="3"]) .eReviewRow:hover {
+  background: var(--surface-2);
+}
+:global(html[data-theme="3"]) .eReviewRow:last-child {
+  border-bottom: none;
+}
+:global(html[data-theme="3"]) .eReviewRow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  bottom: 6px;
+  width: 3px;
+  background: var(--text-3);
+}
+:global(html[data-theme="3"]) .eReviewRowCorrect::before {
+  background: var(--correct);
+}
+/* No full-row green/red fills (traffic-light) — the colored 3px left bar +
+   the verdict icon carry the state. Keeps rows compact + color "religious". */
+:global(html[data-theme="3"]) .eReviewRowWrong::before {
+  background: var(--wrong);
+}
+:global(html[data-theme="3"]) .eReviewQNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+  color: var(--text-3);
+  align-self: center;
+}
+:global(html[data-theme="3"]) .eReviewRowCorrect .eReviewQNum {
+  color: rgba(48, 209, 88, 0.35);
+}
+:global(html[data-theme="3"]) .eReviewBody {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  padding-top: 0;
+}
+:global(html[data-theme="3"]) .eReviewQText {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+/* Correct row: single answer line, magenta moment */
+:global(html[data-theme="3"]) .eReviewAnsSingle {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Wrong row: two parallel labeled rows */
+:global(html[data-theme="3"]) .eReviewAnsCompare {
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 1px;
+}
+/* Wrong-answer line — letter chip + text only; the YOU / ANSWER label
+   column was removed because the colored letter chip (dark for "you",
+   green for "answer") + the green-vs-grey text already signals which
+   row is which. */
+:global(html[data-theme="3"]) .eReviewAnsLineWrong {
+  display: grid;
+  grid-template-columns: 20px 1fr;
+  align-items: center;
+  column-gap: 10px;
+}
+:global(html[data-theme="3"]) .eReviewAnsLbl {
+  display: none;
+}
+:global(html[data-theme="3"]) .eReviewAnsLetter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 800;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+:global(html[data-theme="3"]) .eReviewLetterYou {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text);
+}
+:global(html[data-theme="3"]) .eReviewLetterCorrect {
+  background: var(--correct);
+  color: var(--bg);
+}
+:global(html[data-theme="3"]) .eReviewAnsTextYou {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .eReviewAnsTextCorrect {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--correct);
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+/* Right-edge verdict: silent Doto glyph */
+:global(html[data-theme="3"]) .eReviewVerdict {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  line-height: 1;
+}
+:global(html[data-theme="3"]) .eReviewVerdictWin {
+  color: var(--correct);
+}
+:global(html[data-theme="3"]) .eReviewVerdictLoss {
+  color: var(--wrong);
+}
+
+/* ─── Editorial Buttons Row ─── */
+:global(html[data-theme="3"]) .eButtonsRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* share + challenge side by side */
+  gap: 0.5rem;
+  margin-bottom: 12px;
+}
+
+/* Prominent score-aware sign-in CTA — white filled, full width, on top */
+/* Sign-in promo banner (gated) — lock + dotted ring · copy · orange CTA. */
+:global(html[data-theme="3"]) .signInBanner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  margin-top: 0.6rem;
+  text-align: left;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-card, 14px);
+  color: #fff;
+  font: inherit;
+  cursor: pointer;
+  transition: background 160ms var(--spring-clean), border-color 160ms var(--spring-clean);
+}
+:global(html[data-theme="3"]) .signInBanner:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.22); }
+:global(html[data-theme="3"]) .sibLock {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+}
+:global(html[data-theme="3"]) .sibLockIcon { color: #fff; }
+:global(html[data-theme="3"]) .sibText { flex: 1 1 auto; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+:global(html[data-theme="3"]) .sibTitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  color: #fff;
+}
+:global(html[data-theme="3"]) .sibSub {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--text-2);
+}
+:global(html[data-theme="3"]) .sibBtn {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 18px;
+  background: var(--streak, #ff9500);
+  color: #1a0f00;
+  border-radius: var(--radius-btn, 10px);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: filter 160ms var(--spring-clean);
+}
+:global(html[data-theme="3"]) .signInBanner:hover .sibBtn { filter: brightness(1.08); }
+
+/* Mobile: stay HORIZONTAL (lock · text · button) to save vertical space —
+   tighter gap/padding so it fits the column (user, 2026-06-18). */
+@media (max-width: 480px) {
+  :global(html[data-theme="3"]) .signInBanner { gap: 12px; padding: 12px 14px; }
+  :global(html[data-theme="3"]) .sibTitle { font-size: 13px; }
+  :global(html[data-theme="3"]) .sibBtn { padding: 11px 14px; font-size: 12px; }
+}
+:global(html[data-theme="3"]) .eBtnOutline,
+:global(html[data-theme="3"]) .eBtnFilled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 14px 16px;
+  cursor: pointer;
+  border-radius: 0;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 280ms var(--spring-clean), border-color 280ms var(--spring-clean);
+}
+/* Bar-wipe hover — fill color slides in from the left behind the text */
+:global(html[data-theme="3"]) .eBtnOutline::before,
+:global(html[data-theme="3"]) .eBtnFilled::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-101%);
+  transition: transform 320ms var(--spring-clean);
+  z-index: -1;
+  pointer-events: none;
+}
+:global(html[data-theme="3"]) .eBtnOutline:hover::before,
+:global(html[data-theme="3"]) .eBtnFilled:hover::before {
+  transform: translateX(0);
+}
+
+:global(html[data-theme="3"]) .eBtnOutline {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-btn);
+}
+:global(html[data-theme="3"]) .eBtnOutline::before { background: rgba(255, 255, 255, 0.06); }
+:global(html[data-theme="3"]) .eBtnOutline:hover {
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+:global(html[data-theme="3"]) .eBtnFilled {
+  background: var(--accent);
+  color: var(--bg);
+  border: 0;
+  border-radius: var(--radius-btn);
+}
+:global(html[data-theme="3"]) .eBtnFilled::before { background: #E6E6E6; }
+:global(html[data-theme="3"]) .eBtnFilled:hover { color: var(--bg); }
+:global(html[data-theme="3"]) .eBtnIcon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  flex-shrink: 0;
+  /* Neutral CHALLENGE button — render the black SVG as white (all states;
+     the old magenta hover filter is retired with the pink palette). */
+  filter: brightness(0) invert(1);
+}
+:global(html[data-theme="3"]) .eBtnIconInverted {
+  /* Filled button (SHARE SCORE) keeps a near-black glyph on the white CTA. */
+  filter: brightness(0);
+}
+:global(html[data-theme="3"]) .eBtnFilled:hover .eBtnIconInverted {
+  filter: brightness(0);
+}
+
+/* ─── Mobile sticky CTA bar (Editorial only) ─── */
+:global(html[data-theme="3"]) .eMobileCta { display: none; }
+
+@media (max-width: 1023px) {
+  :global(html[data-theme="3"]) .eMobileCta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 50;
+    padding: 12px clamp(12px, 3vw, 20px) calc(12px + env(safe-area-inset-bottom));
+    background: rgba(0, 0, 0, 0.78);
+    backdrop-filter: blur(18px) saturate(0.8);
+    -webkit-backdrop-filter: blur(18px) saturate(0.8);
+    border-top: 0.5px solid var(--border);
+  }
+  :global(html[data-theme="3"]) .eMobileCtaBtn {
+    appearance: none;
+    background: transparent;
+    color: var(--text);
+    border: 0.5px solid var(--border);
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0;
+    text-transform: uppercase;
+    padding: 14px 12px;
+    cursor: pointer;
+    border-radius: var(--radius-btn);
+    transition: background 200ms ease, color 200ms ease;
+  }
+  :global(html[data-theme="3"]) .eMobileCtaBtn:active { transform: scale(0.98); }
+  :global(html[data-theme="3"]) .eMobileCtaBtnFilled {
+    background: var(--accent);
+    border: none;
+    color: var(--bg);
+  }
+  /* Give the scorecard breathing room above the fixed CTA bar */
+  :global(html[data-theme="3"]) .inner {
+    padding-bottom: calc(96px + env(safe-area-inset-bottom));
+  }
+}
+
+/* ─── Editorial Footer — pinned to the bottom of the scorecard ─── */
+:global(html[data-theme="3"]) .eFooter {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 16px;
+  padding-top: 12px;
+  margin-top: auto;
+  border-top: 0.5px solid var(--divider);
+}
+:global(html[data-theme="3"]) .eTomorrow {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+:global(html[data-theme="3"]) .eReplay {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: var(--text-3);
+  text-transform: uppercase;
+  font-weight: 700;
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-top: 14px;
+  align-self: flex-start;
+}
+:global(html[data-theme="3"]) .eReplay:hover { color: var(--text); }
+
+/* ─── Panel overlay (used by non-Editorial themes when accessing leaderboard/profile) ─── */
+.panelOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.panelOverlayCard {
+  position: relative;
+  width: 100%;
+  max-width: 540px;
+  height: 100%;
+  max-height: 880px;
+  background: #000;
+  border: 1px solid var(--accent);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 36px rgba(255, 255, 255, 0.18);
+}
+.panelOverlayClose {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: none;
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.panelOverlayClose:hover { background: rgba(255, 255, 255, 0.24); }
+

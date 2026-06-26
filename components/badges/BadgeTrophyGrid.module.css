@@ -1,0 +1,63 @@
+/* Shared badge trophy grid — used by ProfilePanel + StreakDrawer "all badges".
+   3-up grid of 112px progress rings (88px badge art) with name + criteria. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* Generous column gap so the 100px rings have real breathing room between
+     them rather than nearly touching (was cramped at 112px / 8px gap). */
+  gap: 26px 16px;
+  justify-items: center;
+}
+
+/* On the narrowest phones (≈390px), three 100px rings + 16px gaps + the panel's
+   side padding exceed the viewport and clip the third column. Tighten the
+   column gap so all three rings fit; the row gap stays generous. */
+@media (max-width: 430px) {
+  .grid {
+    gap: 26px 8px;
+  }
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 4px 0;
+  min-width: 0;
+}
+
+.tileEarned {
+  /* progress ring on .ringWrap carries the earned (green) treatment */
+}
+
+.ringWrap {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tileName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: #fff;
+}
+
+.tileCriteria {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: none;
+  font-weight: 500;
+  line-height: 1.3;
+  padding: 0 4px;
+}

@@ -1,0 +1,392 @@
+/* Shared Streak & Badges summary. Cards rise off the black canvas to --surface
+   (Apple elevation). Signal discipline: orange = streak/fire, green = done,
+   red = missed, purple = badges chrome. Doto for the big numerals. */
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* The panel can be a narrow drawer inside a wide desktop viewport, so the
+     hero adapts to its OWN width (container query), not the viewport. */
+  container-type: inline-size;
+}
+
+/* Inner containers go DARKER than the gray base panel (dark insets), so the
+   green / orange / red streak signals pop. */
+.card,
+.hero,
+.badgesFooter {
+  background: #0c0c0e;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 16px;
+  padding: 14px 16px;
+}
+
+.eyebrow {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* ── 1. Hero — merged current-streak + next-badge card ── */
+.hero {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Top: current streak | next badge, split by a vertical rule */
+.heroTop {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 24px);
+}
+.heroStreak {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.heroFlame {
+  width: 42px;
+  height: auto;
+  flex: 0 0 auto;
+  image-rendering: pixelated;
+}
+.heroCol { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.heroVRule { width: 1px; align-self: stretch; background: var(--divider, rgba(84, 84, 88, 0.25)); flex: 0 0 auto; }
+.heroNext {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+}
+.heroNextName {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.12;
+  color: #fff;
+}
+.heroNextBadge {
+  flex: 0 0 auto;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 12px rgba(255, 149, 0, 0.4));
+}
+
+.heroNumRow { display: flex; align-items: baseline; gap: 7px; }
+.heroNum {
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+.heroUnit {
+  font-size: 15px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+
+/* Days-away line */
+.heroAway {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+.heroAwayNum { color: #ff9500; font-weight: 700; }
+
+/* Progress bar with end caps */
+.heroBarRow { display: flex; align-items: center; gap: 12px; }
+.heroBar {
+  flex: 1 1 auto;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.heroBarFill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--correct, #00ff85), #ff9500);
+  transition: width 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.heroBarCap {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-2);
+  white-space: nowrap;
+}
+.heroBarCapNum { font-size: 15px; font-weight: 700; }
+.heroBarCap[data-side="start"] .heroBarCapNum { color: var(--correct, #00ff85); }
+.heroBarCap[data-side="end"] .heroBarCapNum { color: #fff; }
+
+/* Bottom stats: best streak | total days, split by a vertical rule, under a divider */
+.heroStats {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--border, rgba(84, 84, 88, 0.45));
+}
+.statRow { display: flex; align-items: center; gap: 12px; flex: 1; }
+.statIconGreen { color: var(--correct, #00ff85); flex: 0 0 auto; }
+.statIconOrange { color: #ff9500; flex: 0 0 auto; }
+.statText { display: flex; flex-direction: column; gap: 2px; }
+.statLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.statVal { font-size: 20px; font-weight: 700; color: #fff; }
+.statVal em {
+  font-size: 11px;
+  font-weight: 700;
+  font-style: normal;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.statDivider { width: 1px; align-self: stretch; background: var(--divider, rgba(84, 84, 88, 0.25)); }
+
+/* ── 2. Calendar ── */
+.calHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.calMonth {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+}
+.calNav { display: flex; align-items: center; gap: 8px; }
+.calArrow {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border, rgba(84, 84, 88, 0.45));
+  color: var(--text-2);
+  cursor: pointer;
+  transition: background 160ms;
+}
+.calArrow:hover { background: var(--surface-2, #2c2c2e); }
+.calToday {
+  border: 1px solid #ff9500;
+  color: #ff9500;
+  background: transparent;
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  margin-left: 4px;
+}
+.calDow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr) 0.9fr;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.calDowCell {
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-3);
+}
+.calDowWeek { color: var(--text-2); }
+
+.calGrid { display: flex; flex-direction: column; gap: 6px; }
+.calWeekRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr) 0.9fr;
+  gap: 6px;
+  align-items: center;
+}
+.calBlank { aspect-ratio: 1; }
+
+/* Circular day cells — colour carries state, no icons: completed = solid green,
+   missed = soft red ring, today = white ring, upcoming = faint ring. */
+.calCell {
+  position: relative;
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 40px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.calDate { font-size: 12px; font-weight: 600; color: var(--text-3); line-height: 1; }
+
+.cal_done,
+.cal_todayDone {
+  background: var(--correct, #00ff85);
+  border-color: var(--correct, #00ff85);
+}
+.cal_done .calDate,
+.cal_todayDone .calDate { color: #00150b; font-weight: 700; }
+
+.cal_today { background: transparent; border-color: #fff; }
+.cal_today .calDate { color: #fff; font-weight: 700; }
+
+.cal_missed { background: transparent; border-color: var(--wrong, #ff453a); }
+.cal_missed .calDate { color: var(--wrong, #ff453a); }
+
+.cal_future { background: transparent; border-color: rgba(255, 255, 255, 0.12); }
+.cal_future .calDate { color: var(--text-3); opacity: 0.55; }
+
+/* Per-week streak column: fire (full week), N/7 (partial), — (ahead) */
+.calWeekCell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 28px;
+}
+.calWeekFire { color: #ff9500; }
+.calWeekCheck { color: var(--correct, #00ff85); }
+.calWeekPerfect {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--correct, #00ff85);
+  color: var(--correct, #00ff85);
+}
+.calWeekNone { font-size: 13px; color: var(--text-3); }
+
+.calLegend {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.legItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-2);
+}
+.legDot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex: none;
+}
+.legDone { background: var(--correct, #00ff85); }
+.legMiss { background: transparent; border: 1.5px solid var(--wrong, #ff453a); }
+.legUp { background: transparent; border: 1.5px solid rgba(255, 255, 255, 0.25); }
+.calPlayed {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-2);
+}
+
+/* Weekly-streak explainer (WEEK column key + reassurance copy) */
+.weekNote {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid var(--divider, rgba(84, 84, 88, 0.25));
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.weekKey {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.weekKeyItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.weekNoteText {
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.35;
+  color: var(--text-2);
+}
+.weekNoteText strong { color: #fff; font-weight: 700; }
+
+
+/* ── 5. Badges footer ── */
+.badgesFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+  text-align: left;
+  transition: background 160ms;
+}
+.badgesFooter:hover { background: var(--surface-2, #2c2c2e); }
+.bfLeft { display: flex; align-items: center; gap: 14px; }
+.bfShield { color: var(--accent, #fff); flex: 0 0 auto; }
+.bfText { display: flex; flex-direction: column; gap: 1px; }
+.bfNum { font-size: 22px; font-weight: 700; color: #fff; line-height: 1; }
+.bfCta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent, #fff);
+}
+
+/* ── Responsive ── */
+/* Phone polish — the hero layout itself is handled by the container query
+   above; these are just size trims for small viewports. */
+@media (max-width: 600px) {
+  .card, .hero, .milestone, .badgesFooter { padding: 16px; border-radius: 16px; }
+  .heroNum { font-size: 46px; }
+  .ring { width: 104px; height: 104px; }
+  .ringFlame { width: 42px; }
+  .weekNode { width: 34px; height: 34px; }
+  .msBadge { width: 68px; height: 68px; }
+  .msTitle { font-size: 16px; }
+  .calLegend { gap: 10px 14px; }
+  .calPlayed { margin-left: 0; flex-basis: 100%; }
+}

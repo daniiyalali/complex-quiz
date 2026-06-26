@@ -1,0 +1,69 @@
+/* Dark centered confirm modal — mirrors AuthModal shell (CQ Apple Dark v3). */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 480; /* above the profile sheet / drawers */
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px) saturate(100%);
+  -webkit-backdrop-filter: blur(10px) saturate(100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: cdFade 200ms var(--spring-clean);
+}
+@keyframes cdFade { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  position: relative;
+  width: 360px;
+  max-width: 100%;
+  background: var(--surface, #1c1c1e);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0;
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 8px 16px -6px rgba(0, 0, 0, 0.5);
+  padding: 28px 24px 22px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-inter), Inter, sans-serif;
+  animation: cdPop 240ms var(--spring-bounce);
+}
+@keyframes cdPop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
+.title {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: #fff;
+}
+.body {
+  margin-top: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.actions { display: flex; gap: 8px; margin-top: 22px; }
+.cancel, .confirm {
+  flex: 1;
+  height: 44px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 160ms var(--spring-clean), opacity 160ms var(--spring-clean);
+}
+.cancel { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); }
+.cancel:hover { background: rgba(255, 255, 255, 0.08); }
+.confirm { background: #fff; color: #000; border: none; }
+.confirm:hover { background: #e6e6e6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .modal { animation: none; }
+}

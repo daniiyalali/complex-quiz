@@ -1,0 +1,670 @@
+.shell {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(24px, 4vh, 48px) var(--gutter) clamp(24px, 4vh, 48px);
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.head {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+.timer {
+  font-family: var(--font-anton), "Anton", sans-serif;
+  font-size: clamp(72px, 14vw, 132px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+}
+.timerUnit { font-size: 0.55em; opacity: 0.55; font-weight: 700; }
+.qNum {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.qNum strong { color: #fff; font-weight: 700; }
+.bar {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.10);
+  margin-top: 10px;
+  overflow: hidden;
+  position: relative;
+}
+.barFill {
+  background: #fff;
+  height: 100%;
+  transition: width 0.45s var(--spring-bounce);
+}
+
+.main {
+  width: 100%;
+  max-width: 520px;
+  margin-top: clamp(28px, 5vh, 56px);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.qText {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 3vw, 26px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  color: #fff;
+  text-wrap: balance;
+  text-align: left;
+  animation: q-in 0.45s var(--spring-clean);
+}
+@keyframes q-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opt {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-family: var(--font-display);
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color 160ms var(--spring-clean),
+    background 160ms var(--spring-clean),
+    transform 140ms var(--spring-clean);
+}
+.opt:hover:not(:disabled) {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.06);
+}
+.opt:active:not(:disabled) { transform: scale(0.98); }
+.opt:disabled { cursor: default; opacity: 0.6; }
+
+/* Selected (pre-reveal) — clear, neutral-surface affordance: Volt left bar +
+   faint Volt tint. No right/wrong implied yet. */
+.optSelected {
+  border-left: 3px solid var(--accent) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+.optLetter {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0;
+  transition: background 160ms, color 160ms, border-color 160ms;
+}
+.optText {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qText { animation: none; }
+}
+
+/* default: hide editorial-only elements */
+.qNumTop { display: none; }
+
+/* ═══════════ OPTION 3 — EDITORIAL (frosted dark card v2) ═══════════ */
+:global(html[data-theme="3"]) .shell {
+  background: #000 !important;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px, 4vh, 48px) clamp(12px, 4vw, 24px);
+  overflow: hidden;
+  position: fixed;
+  inset: 0;
+}
+
+/* Sneaker on TV bg — covers viewport, photo is the hero */
+:global(html[data-theme="3"]) .shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/figma/question-bg.png");
+  background-size: cover;
+  background-position: center;
+  /* Colored sneaker photo — more visible now (less black over it). */
+  filter: brightness(1) saturate(1.08);
+  opacity: 0.65;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Green LED dot-matrix — the consistent ambient background (over the dimmed
+   photo, under the oval + card). CSS grid so it always renders. */
+:global(html[data-theme="3"]) .ledField {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(0, 255, 133, 0.55) 1.1px, transparent 1.7px);
+  background-size: 16px 16px;
+  opacity: 0.42;
+}
+:global(html[data-theme="3"]) .shell::after { display: none; }
+
+/* Card */
+:global(html[data-theme="3"]) .card {
+  position: relative;
+  z-index: 2;
+}
+
+/* Frosted translucent dark card */
+:global(html[data-theme="3"]) .card {
+  width: 100%;
+  max-width: 627px;
+  margin: 0;
+  background: rgba(8, 4, 14, 0.82);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 14px;
+  overflow: hidden;
+  color: #F0F0F0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Hide legacy elements not in this layout */
+:global(html[data-theme="3"]) .kicker,
+:global(html[data-theme="3"]) .qNum,
+:global(html[data-theme="3"]) .qNumTop,
+:global(html[data-theme="3"]) .head,
+:global(html[data-theme="3"]) .main,
+:global(html[data-theme="3"]) .bar,
+:global(html[data-theme="3"]) .timeUnit,
+:global(html[data-theme="3"]) .timerUnit {
+  display: none !important;
+}
+
+/* ─── Top progress bar (3px, fills with current question) ─── */
+:global(html[data-theme="3"]) .progressBar {
+  display: block;
+  width: 100%;
+  height: 3px;
+  background: #1e1e1e;
+}
+:global(html[data-theme="3"]) .progressBarFill {
+  height: 100%;
+  background: var(--accent);
+  transition: width 320ms var(--spring-clean);
+}
+
+/* ─── Timer zone ─── */
+:global(html[data-theme="3"]) .timerZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1.25rem 1.5rem;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.12);
+}
+
+:global(html[data-theme="3"]) .timer {
+  font-family: var(--font-doto), Doto, monospace !important;
+  font-size: clamp(2.75rem, 7.5vw, 4.5rem) !important;
+  font-weight: 900;
+  /* Traffic-light timer: green at rest → orange ≥10s → red ≥20s */
+  color: var(--correct, #00ff85);
+  text-shadow: 0 0 16px rgba(0, 255, 133, 0.35);
+  letter-spacing: 0;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  transition: color 240ms var(--spring-clean), text-shadow 240ms var(--spring-clean);
+}
+
+/* Time-pressure escalation — amber warn, then a red pulse when hot */
+:global(html[data-theme="3"]) .timer[data-warn] {
+  color: var(--warn);
+  text-shadow: 0 0 14px rgba(255, 159, 10, 0.45);
+}
+:global(html[data-theme="3"]) .timer[data-hot] {
+  color: var(--warn-hot);
+  animation: cqTimerHot 0.72s var(--spring-clean) infinite;
+}
+@keyframes cqTimerHot {
+  0%, 100% { opacity: 1;    text-shadow: 0 0 10px rgba(255, 149, 146, 0.35); }
+  50%      { opacity: 0.7;  text-shadow: 0 0 20px rgba(255, 149, 146, 0.7); }
+}
+@media (prefers-reduced-motion: reduce) {
+  :global(html[data-theme="3"]) .timer[data-hot] { animation: none; }
+}
+
+:global(html[data-theme="3"]) .timerLabel {
+  display: block;
+  margin-top: 0.4rem;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+}
+
+/* ─── Dot row + question number ─── */
+:global(html[data-theme="3"]) .dotRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+}
+:global(html[data-theme="3"]) .dots {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+:global(html[data-theme="3"]) .dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: #2e2e2e;
+  transition: background 200ms ease;
+}
+:global(html[data-theme="3"]) .dotFilled {
+  background: var(--accent);
+}
+:global(html[data-theme="3"]) .qNumLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* ─── Question text ─── */
+:global(html[data-theme="3"]) .qText {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: clamp(1.125rem, 3.4vw, 1.625rem) !important;
+  font-weight: 500 !important;
+  color: #F0F0F0 !important;
+  text-align: left;
+  line-height: 1.35;
+  letter-spacing: 0 !important;
+  padding: 1.5rem 1.5rem 1.25rem;
+  margin: 0;
+  text-transform: none;
+}
+
+/* (Legacy theme-3 frosted-card option styles removed 2026-06-11 — the
+   Question v2 block at the end of this file owns the answer layout now.) */
+
+
+/* ═══ QUESTION SCREEN v2 (2026-06-11 mock): full-bleed hero + segments +
+   centered LED stopwatch + left question + letter-chip answers ═══ */
+
+:global(html[data-theme="3"]) .shell {
+  display: block !important;
+  padding: 0 !important;
+  background: #000 !important;
+  /* The shell is a fixed, viewport-locked screen — but its content (timer +
+     hero + question + 4 option cards) can exceed a real phone's usable height
+     once Safari's URL bar is showing. Without this it clipped option D with no
+     way to reach it (AGENTS.md → variable content must scroll, never hidden). */
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Contained hero band: flexes to fill the room between the timer and the
+   question; the full shoe shows (object-fit: contain, never cropped) and
+   the top + bottom edges fade into the black page so it blends. */
+:global(html[data-theme="3"]) .qHeroBand {
+  position: relative;
+  width: 100%;
+  flex: 1 1 0;
+  min-height: 150px;
+  margin: clamp(12px, 3vh, 28px) 0 0;
+  grid-area: img;
+}
+:global(html[data-theme="3"]) .qHeroImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  /* fade the top and bottom edges into the black page */
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 16%,
+    #000 84%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    180deg,
+    transparent 0%,
+    #000 16%,
+    #000 84%,
+    transparent 100%
+  );
+}
+
+:global(html[data-theme="3"]) .qLayout {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: calc(56px + 16px) clamp(16px, 4vw, 56px) clamp(16px, 3.2vh, 40px);
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+:global(html[data-theme="3"]) .qHead {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 9px;
+  grid-area: head;
+}
+:global(html[data-theme="3"]) .qCount {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+:global(html[data-theme="3"]) .qCount span { color: var(--correct, #00ff85); }
+:global(html[data-theme="3"]) .qSegs {
+  display: flex;
+  gap: 7px;
+  width: min(330px, 70%);
+}
+:global(html[data-theme="3"]) .qSeg {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.28);
+  transition: background 240ms var(--spring-clean);
+}
+:global(html[data-theme="3"]) .qSegOn { background: var(--correct, #00ff85); }
+
+:global(html[data-theme="3"]) .timerZone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: clamp(10px, 3.5vh, 32px);
+  background: none;
+  border: none;
+  padding: 0;
+  grid-area: timer;
+}
+:global(html[data-theme="3"]) .timerLabel {
+  order: -1; /* mobile: label above the clock */
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--correct, #00ff85);
+}
+:global(html[data-theme="3"]) .qLayout .timer {
+  font-size: clamp(3.2rem, 9vw, 6.2rem) !important;
+}
+
+:global(html[data-theme="3"]) .qLayout .qText {
+  margin: clamp(8px, 2vh, 20px) 0 0;
+  grid-area: ques;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(25px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  line-height: 1.18;
+  color: #fff;
+  text-align: left;
+  max-width: 30ch;
+  /* the 30ch cap must not let the flex column center it — pin to the left so
+     the first glyph lines up with the option cards' left edge. */
+  align-self: flex-start;
+}
+
+:global(html[data-theme="3"]) .qLayout .options {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  margin-top: clamp(14px, 2.6vh, 24px);
+  width: 100%;
+  grid-area: ans;
+}
+:global(html[data-theme="3"]) .qLayout .opt {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  padding: 13px 16px;
+  /* Near-opaque so the LED corner accents never bleed through the card and
+     hurt legibility, whatever is animating behind it. */
+  background: rgba(14, 14, 16, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    border-color 160ms var(--spring-clean),
+    background 160ms var(--spring-clean),
+    transform var(--dur-snap, 200ms) var(--spring-snap);
+}
+:global(html[data-theme="3"]) .qLayout .opt:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.38);
+  background: rgba(28, 28, 32, 0.97);
+}
+:global(html[data-theme="3"]) .qLayout .opt:active:not(:disabled) { transform: scale(0.99); }
+:global(html[data-theme="3"]) .optKey {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  /* neutral white chip — green would read as "this is the correct answer" */
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  border-radius: 9px;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  transition: background 160ms var(--spring-clean), color 160ms var(--spring-clean), border-color 160ms var(--spring-clean);
+}
+/* Selected (pre-reveal) — neutral white affordance, NOT green (correctness
+   is only revealed after answering). */
+/* Selected (pre-reveal) — the affordance is the bright white border + filled
+   letter chip, NOT a light card fill. Keep the card dark + opaque so the LED
+   accents stay blocked and the press state never lights up the background. */
+:global(html[data-theme="3"]) .qLayout .optSelected {
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(40, 40, 44, 0.97);
+}
+:global(html[data-theme="3"]) .optSelected .optKey {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+:global(html[data-theme="3"]) .qLayout .optText {
+  font-size: 15.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: #fff;
+}
+
+/* Desktop: full-bleed shoe on the right, fading (opacity mask) into the black
+   left column so it blends behind the timer; all content left-aligned and
+   vertically balanced in the left half. */
+@media (min-width: 1024px) {
+  :global(html[data-theme="3"]) .qLayout {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;   /* vertical balance */
+    align-items: flex-start;   /* everything left-aligned */
+    min-height: 100dvh;
+    max-width: none;
+    margin: 0;
+    gap: clamp(18px, 3vh, 34px);
+    padding: calc(56px + 24px) clamp(40px, 6vw, 96px) 40px;
+  }
+  /* image bleeds off the right edge, full height; left edge dissolves into
+     the page so it sits behind the timer/content rather than in a box. */
+  :global(html[data-theme="3"]) .qHeroBand {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 58%;
+    margin: 0;
+    min-height: 0;
+    z-index: 0;
+  }
+  :global(html[data-theme="3"]) .qHeroImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 42%, #000 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 42%, #000 100%);
+  }
+  /* content sits above the faded image edge, left-aligned, left-half width */
+  :global(html[data-theme="3"]) .qHead,
+  :global(html[data-theme="3"]) .timerZone,
+  :global(html[data-theme="3"]) .qLayout .qText,
+  :global(html[data-theme="3"]) .qLayout .options {
+    position: relative;
+    z-index: 2;
+    width: min(540px, 46vw);
+    margin: 0;
+  }
+  :global(html[data-theme="3"]) .timerZone { align-items: flex-start; }
+  :global(html[data-theme="3"]) .timerLabel { order: 2; } /* label under clock */
+  :global(html[data-theme="3"]) .qLayout .qText { max-width: none; }
+  :global(html[data-theme="3"]) .qLayout .options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* v2 owns the background — retire the old photo layer */
+:global(html[data-theme="3"]) .shell::before { display: none; }
+
+/* Mobile: the ENTIRE question must fit the viewport — no scroll, on every
+   phone (iPhone 13/14/Pro Max, URL bar shown or hidden). The trick: the hero
+   photo is the ONLY flexible element. It grows to fill leftover space on tall
+   phones and shrinks to a sliver on short ones, so the timer, question, and
+   all four answer cards always keep their full size and stay on screen. The
+   timer/question/options are flex-shrink:0 so they're never squeezed. */
+@media (max-width: 1023px) {
+  :global(html[data-theme="3"]) .qLayout {
+    /* lock to the viewport so flex distributes space exactly (no growth past
+       the screen → nothing to scroll) */
+    height: 100dvh;
+    min-height: 100dvh;
+    justify-content: flex-start;
+    gap: 0;
+    padding-top: calc(56px + 8px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 10px);
+  }
+  /* the photo absorbs ALL slack; it alone shrinks when room is tight */
+  :global(html[data-theme="3"]) .qHeroBand {
+    flex: 1 1 0;
+    min-height: 44px;
+    max-height: none;
+    margin: 8px 0;
+  }
+  /* fixed-size, never-squeezed content */
+  :global(html[data-theme="3"]) .qHead,
+  :global(html[data-theme="3"]) .timerZone,
+  :global(html[data-theme="3"]) .qLayout .qText,
+  :global(html[data-theme="3"]) .qLayout .options {
+    flex-shrink: 0;
+  }
+  /* trim the verticals so the fixed parts + 4 cards comfortably fit even the
+     shorter phones with Safari chrome showing */
+  :global(html[data-theme="3"]) .timerZone { margin-top: 6px; gap: 4px; }
+  :global(html[data-theme="3"]) .qLayout .timer {
+    font-size: clamp(2.6rem, 12.5vw, 4.4rem) !important;
+  }
+  :global(html[data-theme="3"]) .qLayout .qText {
+    margin: 6px 0 0;
+    font-size: clamp(18px, 4.4vw, 23px);
+    line-height: 1.22;
+  }
+  :global(html[data-theme="3"]) .qLayout .options { margin-top: 10px; gap: 8px; }
+  :global(html[data-theme="3"]) .qLayout .opt { padding: 11px 14px; }
+}
+
+/* Short viewports (small phones, or larger phones with full Safari chrome):
+   squeeze the photo to a sliver and compact the type so all four options
+   still land on screen without scrolling. The hero is sacrificed first; the
+   answers are never compromised. */
+@media (max-width: 1023px) and (max-height: 640px) {
+  :global(html[data-theme="3"]) .qHeroBand { min-height: 0; margin: 4px 0; }
+  :global(html[data-theme="3"]) .timerZone { margin-top: 4px; }
+  :global(html[data-theme="3"]) .qLayout .timer {
+    font-size: clamp(2.2rem, 11vw, 3.2rem) !important;
+  }
+  :global(html[data-theme="3"]) .timerLabel { font-size: 11px; }
+  :global(html[data-theme="3"]) .qLayout .qText {
+    font-size: 16.5px;
+    margin-top: 4px;
+  }
+  :global(html[data-theme="3"]) .qLayout .options { margin-top: 8px; gap: 6px; }
+  :global(html[data-theme="3"]) .qLayout .opt { padding: 9px 13px; }
+  :global(html[data-theme="3"]) .optKey { width: 30px; height: 30px; font-size: 14px; }
+  :global(html[data-theme="3"]) .qLayout .optText { font-size: 14.5px; }
+}

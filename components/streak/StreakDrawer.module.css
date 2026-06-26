@@ -1,0 +1,562 @@
+.root {
+  position: fixed;
+  inset: 0;
+  /* Must sit above the leaderboard BottomSheet (z 300/310). */
+  z-index: 400;
+  pointer-events: none;
+}
+.rootOpen { pointer-events: auto; }
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  /* Matches the results all-badges / profile modal backdrop so every popup in
+     the experience dims + blurs the page the same way. */
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(12px) saturate(100%);
+  -webkit-backdrop-filter: blur(12px) saturate(100%);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.rootOpen .overlay { opacity: 1; }
+/* Dismiss: faster ease-dismiss timing */
+.root:not(.rootOpen) .overlay {
+  transition: opacity 200ms var(--ease-dismiss);
+}
+
+.panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 84vh;
+  /* Gray base (a touch darker than --surface) — the INNER cards go darker so
+     they read as dark insets and the streak colours pop. */
+  background: #1a1a1c;
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 14px 20px;
+  transform: translateY(100%);
+  transition: transform var(--dur-fast) var(--spring-clean);
+  overflow-y: auto;
+  color: var(--text);
+  font-family: var(--font-inter), Inter, sans-serif;
+  box-sizing: border-box;
+  will-change: transform;
+}
+.rootOpen .panel { transform: translateY(0); }
+/* Dismiss: ease-dismiss curve */
+.root:not(.rootOpen) .panel {
+  transition: transform var(--dur-fast) var(--ease-dismiss);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .panel {
+    left: 50%;
+    right: auto;
+    width: min(580px, 92vw);
+    transform: translate(-50%, 100%);
+  }
+  .rootOpen .panel { transform: translate(-50%, 0); }
+}
+
+/* Desktop: centered modal — all corners rounded, no drag handle, no inner scroll. */
+@media (min-width: 1024px) {
+  .overlay { background: rgba(0, 0, 0, 0.72); }
+  .panel {
+    top: 50%;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    width: min(620px, 92vw);
+    height: min(720px, 90vh);
+    border-radius: var(--radius-sheet);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 20px 22px 20px;
+    transform: translate(-50%, -50%) scale(0.94);
+    opacity: 0;
+    transition:
+      opacity var(--dur-fast) var(--spring-clean),
+      transform var(--dur-fast) var(--spring-clean);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.06);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    will-change: transform, opacity;
+  }
+  .rootOpen .panel {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  .handleHit { display: none !important; }
+  .header { margin-top: 0; }
+
+  /* Tighten everything on desktop so all blocks fit without scroll */
+  .sep { margin: 10px 0; }
+  .streakRow { gap: 12px; }
+  .streakNum { font-size: 36px; }
+  .weekCard { margin-top: 0; padding: 12px; }
+  .weekHead { margin-bottom: 10px; }
+  .weekGrid { gap: 5px; }
+  .cell { max-width: 38px; border-radius: 10px; }
+  .weekNudge { margin-top: 10px; padding: 10px 14px; font-size: 11px; }
+  .badgesHeader { margin: 14px 0 8px; }
+  .badgesRow { gap: 10px; margin-bottom: 10px; }
+  /* Summary badge size on desktop is set via the BadgeChip `size` prop
+     (44 vs 56 on mobile); see StreakDrawer.tsx. */
+  .badgeName { font-size: 8px; }
+  .progressBlock { margin-bottom: 10px; }
+  .progressLabel { font-size: 10px; margin-bottom: 4px; }
+  .progressSub { font-size: 9px; margin-top: 4px; }
+  .pass { height: 28px; font-size: 9px; }
+  .playCta { margin: 8px 0 0; padding: 10px 14px; font-size: 13px; }
+}
+
+.handleHit {
+  width: 100%;
+  padding: 12px 0 8px;
+  display: flex;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+}
+.handleHit:active { cursor: grabbing; }
+.handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(84, 84, 88, 0.55);
+  border-radius: 2px;
+  margin: 8px auto 6px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+/* Title — consistent with HowItWorks header treatment so all bottom-sheet
+   drawers carry the same eyebrow weight + tracking. */
+/* Sheet title — house type ramp: 22/600, sentence case */
+.title {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  margin: 0;
+}
+/* Close button — small circular pill matching HowItWorks/Question overlays. */
+.close {
+  width: 28px;
+  height: 28px;
+  background: var(--surface-2);
+  border: 0;
+  border-radius: 50%;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text-2);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform var(--dur-snap) var(--spring-snap),
+    background var(--dur-snap) var(--spring-clean),
+    color var(--dur-snap) var(--spring-clean);
+}
+.close:hover {
+  background: var(--chip);
+  color: var(--text);
+}
+.close:active {
+  transform: scale(0.92);
+  transition: transform var(--dur-snap) var(--spring-snap);
+}
+
+.sep {
+  height: 1px;
+  background: var(--divider);
+  margin: 16px 0;
+}
+
+/* HERO — big pixel flame + huge Doto number + pink accent label */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 4px 0 12px;
+}
+.heroFlame {
+  width: 56px;
+  aspect-ratio: 45 / 53;
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+  margin-bottom: 4px;
+}
+.heroNum {
+  font-family: var(--font-doto), monospace;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 0.9;
+  color: var(--text);
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+.heroLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+.heroBest {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0;
+  text-transform: uppercase;
+  margin-top: 6px;
+}
+@media (max-width: 480px) {
+  .heroFlame { width: 48px; }
+  .heroNum { font-size: 48px; }
+  .heroLabel { font-size: 12px; }
+  /* Reclaim side room so the 3-up badge grid clears the viewport on ~390px
+     phones. The panel (was 32px) and the all-badges scroll wrapper (16px)
+     stacked to 48px/side, overflowing the 100px rings by ~38px. */
+  .panel { padding-left: 12px; padding-right: 12px; }
+  .allScroll { padding-left: 6px; padding-right: 6px; }
+  .summaryScroll { padding-left: 4px; padding-right: 4px; }
+}
+
+/* Primary CTA when the user hasn't played today */
+.playCta {
+  display: block;
+  width: 100%;
+  margin: 16px 0 0;
+  padding: 14px 16px;
+  background: var(--accent);
+  border: 0;
+  border-radius: var(--radius-btn);
+  color: var(--bg);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform var(--dur-release) var(--ease-apple-spring),
+    background var(--dur-hover) var(--ease-apple-standard);
+  will-change: transform;
+}
+.playCta:hover { background: #E6E6E6; }
+.playCta:active {
+  transform: scale(0.965);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+.playCta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* SEE ALL → expanded view */
+.allBack {
+  background: none;
+  border: 0;
+  padding: 4px 0 12px;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0;
+  cursor: pointer;
+  align-self: flex-start;
+}
+.allBack:hover { opacity: 0.7; }
+.allMeta {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0;
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+/* Scroll wrapper for the "all badges" view. The grid itself is the shared
+   <BadgeTrophyGrid> (BadgeTrophyGrid.module.css), rendered identically on the
+   profile, so the two surfaces stay in lockstep on badge size + treatment. */
+.allScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 16px 40px;
+}
+
+/* Summary view scrolls the same way the "all" view does. */
+.summaryScroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 6px 28px;
+}
+
+/* Section headers — drop to base level for visual separation */
+.sectionHeader {
+  background: var(--bg);
+  color: rgba(235, 235, 245, 0.45);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 12px 20px 6px;
+  letter-spacing: 0;
+}
+
+/* WEEK CARD */
+.weekCard {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-card-sm);
+  padding: 16px 16px 0;
+  margin-top: 8px;
+}
+.weekHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.weekHeadTitle {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-3);
+  letter-spacing: 0;
+}
+.weekHeadBonus {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0;
+}
+
+.weekGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+}
+.cellCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+.dayLabel {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+.dayLabelToday { color: var(--accent); }
+
+.cell {
+  width: 100%;
+  max-width: 44px;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+.done { background: var(--accent); }
+.todayPlayed {
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.28);
+}
+.today {
+  background: transparent;
+  border: 2px dashed var(--accent);
+}
+.future { background: var(--surface-2); }
+.missed { background: var(--chip); }
+
+.cellDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: dotPulse 1.4s ease-in-out infinite;
+}
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.8); }
+}
+.cellMissX {
+  color: var(--text-3);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.weekNudge {
+  margin: 16px -16px 0;
+  padding: 14px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.18);
+  border-radius: 0 0 var(--radius-card-sm) var(--radius-card-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0;
+  text-align: center;
+}
+
+.badgesHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin: 24px 0 12px;
+}
+.badgesTitle {
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-3);
+  letter-spacing: 0;
+}
+.badgesSeeAll {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.badgesRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+.badgeChip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  min-width: 0;
+}
+/* Wrapper around <BadgeMark>. BadgeMark sets its own inline transform to
+   normalize each PNG's visible artwork to a uniform fill, so we only handle
+   centering + the locked desaturation here. */
+.badgeMarkWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.badgeMarkLocked {
+  filter: grayscale(1) brightness(0.85) opacity(0.55);
+}
+.badgeImgWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-3);
+  font-weight: 700;
+  font-size: 20px;
+  background: var(--surface-2);
+  border: 2px dashed var(--chip);
+  box-sizing: border-box;
+}
+.badgeNextPill {
+  position: absolute;
+  top: -8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--accent);
+  font-size: 8px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 3px;
+  letter-spacing: 0;
+  z-index: 1;
+}
+.badgeName {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(235, 235, 245, 0.70);
+  text-align: center;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.badgeDesc {
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--text-3);
+  text-align: center;
+  line-height: 1.25;
+  letter-spacing: 0;
+  margin-top: 2px;
+  max-width: 100%;
+}
+
+.progressBlock { margin-bottom: 16px; }
+.progressLabel {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.progressBar {
+  width: 100%;
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.progressFill {
+  height: 100%;
+  /* yellow = in-progress (gaming-signal ramp) */
+  background: #ffd60a;
+  border-radius: 4px;
+  transition: width 400ms ease-out;
+}
+.progressSub {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-3);
+  margin-top: 6px;
+}
+
+.pass {
+  background: var(--surface-2);
+  border-radius: var(--radius-chip);
+  height: 32px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  font-size: 9px;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .overlay,
+  .progressFill,
+  .todayDot { transition: none; animation: none; }
+}

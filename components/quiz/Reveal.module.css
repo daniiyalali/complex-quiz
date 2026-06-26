@@ -1,0 +1,497 @@
+.shell {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(24px, 4vh, 48px) var(--gutter);
+  cursor: pointer;
+  overflow-y: auto;
+  animation: reveal-in 360ms var(--spring-clean);
+  transition: opacity 380ms ease-out, filter 380ms ease-out;
+  will-change: opacity, filter;
+}
+.shellExit {
+  opacity: 0;
+  filter: blur(6px);
+  pointer-events: none;
+}
+@keyframes reveal-in {
+  from { opacity: 0; filter: blur(8px); }
+  to   { opacity: 1; filter: blur(0); }
+}
+
+.stack {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(24px, 4vh, 40px);
+  text-align: center;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ─── Ticks ─── */
+.ticks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.segs {
+  display: flex;
+  gap: 8px;
+}
+.seg {
+  width: 44px;
+  height: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.20);
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s, border-color 0.3s;
+}
+.segRight {
+  background: var(--cq-green, #30D158);
+  border-color: var(--cq-green, #30D158);
+  animation: seg-flip 300ms var(--spring-bounce) both;
+}
+.segWrong {
+  background: var(--cq-red, #FF453A);
+  border-color: var(--cq-red, #FF453A);
+  animation: seg-flip 300ms var(--spring-bounce) both;
+}
+.segNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 16px;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.4);
+  line-height: 1;
+  pointer-events: none;
+  transition: color 200ms;
+}
+.segRight .segNum,
+.segWrong .segNum {
+  color: #fff;
+}
+@keyframes seg-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes seg-flip {
+  0%   { opacity: 0; transform: rotateY(90deg); }
+  100% { opacity: 1; transform: rotateY(0); }
+}
+
+/* ─── Big score ─── */
+.bigBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  animation: rv-score-in 420ms var(--spring-bounce) both;
+}
+.score {
+  font-family: var(--font-anton), "Anton", sans-serif;
+  font-size: clamp(110px, 22vw, 220px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  display: inline-flex;
+  align-items: baseline;
+}
+.scoreSlash { opacity: 0.5; padding: 0 0.04em; }
+
+/* ─── Time ─── */
+.timeBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  animation: rv-rise-in 320ms var(--spring-bounce) both;
+}
+.time {
+  font-family: var(--font-anton), "Anton", sans-serif;
+  font-size: clamp(48px, 11vw, 92px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.timeUnit {
+  font-family: var(--font-mono);
+  font-size: 0.24em;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* ─── Badge ─── */
+.badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  animation: rv-score-in 420ms var(--spring-bounce) both;
+  margin-top: 8px;
+}
+.badgeArt {
+  width: 88px;
+  height: 88px;
+  border: 2.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 32px;
+}
+.badge_white { color: #fff; background: rgba(255, 255, 255, 0.06); }
+.badge_bronze { color: #cd7f32; background: rgba(205, 127, 50, 0.08); }
+.badge_silver { color: #c0c0c0; background: rgba(192, 192, 192, 0.08); }
+.badge_gold { color: #FFCC00; background: rgba(255, 204, 0, 0.10); }
+.badge_platinum { color: #00ffd1; background: rgba(0, 255, 209, 0.08); }
+.badgeName {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.badgeSub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+@keyframes slam-y {
+  0%   { transform: translateY(-80px) scale(0.5); opacity: 0; }
+  60%  { transform: translateY(0) scale(1.12); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes slam-x {
+  0%   { transform: translateX(-120px) scale(0.6); opacity: 0; }
+  60%  { transform: translateX(0) scale(1.08); opacity: 1; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes rv-score-in {
+  0%   { opacity: 0; transform: scale(0.82); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes rv-rise-in {
+  0%   { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+@keyframes rv-cta-in {
+  0%   { opacity: 0; transform: translateY(8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.skipHint {
+  position: absolute;
+  bottom: 18px;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.32);
+  text-transform: uppercase;
+  pointer-events: none;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bigBlock, .timeBlock, .badge { animation: none; }
+  .segRight, .segWrong { animation: none; }
+}
+
+/* ═══════════ OPTION 3 — CQ APPLE DARK v3 ═══════════ */
+/*
+ * TSX NOTE (no TSX edit made here): Score, time, and rank live in three
+ * sibling divs (.bigBlock, .timeBlock, .rankBlock) inside .stack. To render
+ * them as a unified #1C1C1E card the spec describes, wrap those three blocks
+ * in a single <div className={styles.statsCard}> in Reveal.tsx and add the
+ * .statsCard rule below. Until that wrapper exists, we approximate the card
+ * grouping with a CSS grid + shared background on .stack's inner region —
+ * but a real wrapper is the correct fix.
+ */
+
+:global(html[data-theme="3"]) .shell {
+  background: var(--bg) !important;
+  color: var(--text);
+  position: fixed;
+  inset: 0;
+  padding: clamp(1.5rem, 4vh, 3rem) 1.5rem;
+  gap: 2rem;
+}
+/* Sneaker bg — stays visible behind floating elements */
+:global(html[data-theme="3"]) .shell::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/figma/question-bg.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.45;
+  z-index: 0;
+}
+/* Content wrapper — floats on pure black / sneaker bg */
+:global(html[data-theme="3"]) .stack {
+  position: relative;
+  z-index: 2;
+  background: transparent;
+  color: var(--text);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  width: 100%;
+  max-width: 560px;
+  gap: 2rem;
+}
+/* Stats card — wraps bigBlock + timeBlock + rankBlock visually.
+   Applied via ::before pseudo on .stack scoped to the stat rows.
+   Real fix: add <div className={styles.statsCard}> wrapper in Reveal.tsx. */
+:global(html[data-theme="3"]) .statsCard {
+  background: var(--surface);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: clamp(1.25rem, 3vw, 2rem) clamp(1rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+}
+:global(html[data-theme="3"]) .label {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-size: 0.65rem;
+  color: var(--text-3);
+  letter-spacing: 0;
+  font-weight: 500;
+  text-align: center;
+}
+/* Answer boxes */
+:global(html[data-theme="3"]) .seg {
+  border: 0.5px solid rgba(84, 84, 88, 0.30);
+  background: var(--surface);
+  border-radius: var(--radius-card-sm);
+  width: clamp(2.25rem, 9vw, 3rem);
+  height: clamp(2.25rem, 9vw, 3rem);
+}
+/* Saturated solid signals (matches the streak-calendar dots): green = correct,
+   red = wrong. One contrast rule across the app — black glyph on green,
+   white on red. No washed 10% tints. */
+:global(html[data-theme="3"]) .segRight {
+  background: var(--correct);
+  border-color: var(--correct);
+}
+:global(html[data-theme="3"]) .segWrong {
+  background: var(--wrong);
+  border-color: var(--wrong);
+}
+:global(html[data-theme="3"]) .segNum {
+  font-size: clamp(0.75rem, 2.5vw, 1rem);
+  color: var(--text-3);
+}
+:global(html[data-theme="3"]) .segRight .segNum {
+  color: #000;
+}
+:global(html[data-theme="3"]) .segWrong .segNum {
+  color: #fff;
+}
+/* Editorial verdict word above the score (Perfect. / Solid. / …) */
+.perfLabel { text-align: center; }
+:global(html[data-theme="3"]) .perfLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(20px, 5vw, 30px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 6px;
+  animation: rv-score-in 420ms var(--spring-bounce) both;
+}
+/* Score — Doto, accent Volt */
+:global(html[data-theme="3"]) .score {
+  font-family: var(--font-doto), Doto, monospace !important;
+  font-size: clamp(48px, 14vw, 72px) !important;
+  font-weight: 900;
+  color: var(--accent) !important;
+  text-shadow: none;
+  letter-spacing: 0;
+  line-height: 0.9;
+}
+:global(html[data-theme="3"]) .scoreSlash {
+  color: var(--text-3) !important;
+  opacity: 1;
+}
+/* Time */
+:global(html[data-theme="3"]) .time {
+  font-family: var(--font-doto), Doto, monospace !important;
+  font-size: clamp(2.5rem, 7vw, 3.5rem) !important;
+  color: var(--text) !important;
+  text-shadow: none;
+  font-weight: 900;
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .timeUnit {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-2) !important;
+  font-size: clamp(0.8rem, 2vw, 1rem);
+  letter-spacing: 0;
+  font-weight: 500;
+}
+/* Badge — swap legacy hex to v3 tokens; full redesign deferred to Phase 6 */
+:global(html[data-theme="3"]) .badgeArt {
+  border: 2px solid var(--accent) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  color: var(--accent) !important;
+  border-radius: var(--radius-card-sm);
+  width: 4.5rem;
+  height: 4.5rem;
+}
+:global(html[data-theme="3"]) .badge_white,
+:global(html[data-theme="3"]) .badge_bronze,
+:global(html[data-theme="3"]) .badge_silver,
+:global(html[data-theme="3"]) .badge_gold,
+:global(html[data-theme="3"]) .badge_platinum {
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+:global(html[data-theme="3"]) .badgeName {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text) !important;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+:global(html[data-theme="3"]) .badgeSub {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+  letter-spacing: 0;
+}
+:global(html[data-theme="3"]) .skipHint {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--text-3) !important;
+  letter-spacing: 0;
+}
+/* CTA — Volt-filled primary action (SEE RESULTS / NEXT). The single most
+   important action on the screen, so it carries the accent. */
+:global(html[data-theme="3"]) .primaryCta,
+:global(html[data-theme="3"]) .skipCta {
+  background: var(--accent);
+  border: none;
+  color: #000;
+  border-radius: var(--radius-btn);
+  padding: 15px 32px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+:global(html[data-theme="3"]) .primaryCta:hover,
+:global(html[data-theme="3"]) .skipCta:hover {
+  background: #E6E6E6;
+  color: #000;
+}
+:global(html[data-theme="3"]) .primaryCta:focus-visible,
+:global(html[data-theme="3"]) .skipCta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* User-tap CTA — in document flow at the bottom of the cinematic column.
+   Single button that advances to next screen; label flips with `complete`. */
+.ctaRow {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  z-index: 5;
+  animation: rv-cta-in var(--dur-snap) var(--spring-clean) both;
+}
+.ctaRow > button {
+  max-width: min(28rem, 90vw);
+  width: 100%;
+}
+.primaryCta,
+.skipCta {
+  width: 100%;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 18px 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 0;
+  transition:
+    transform var(--dur-release) var(--ease-apple-spring),
+    background var(--dur-hover) var(--ease-apple-standard),
+    color var(--dur-hover) var(--ease-apple-standard);
+  will-change: transform;
+}
+.skipCta {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+.skipCta:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  border-color: #fff;
+}
+.primaryCta {
+  /* Same magenta as the answer tiles above (1, 2, 5) */
+  background: var(--accent);
+  color: #000;
+}
+.primaryCta:hover { background: #E6E6E6; }
+.primaryCta:active,
+.skipCta:active {
+  transform: scale(0.965);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+.primaryCta:focus-visible,
+.skipCta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+:global(html[data-theme="3"]) .skipCta {
+  color: rgba(255, 255, 255, 0.75);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+:global(html[data-theme="3"]) .skipCta:hover {
+  background: rgba(255, 255, 255, 0.06);
+  color: #F0F0F0;
+  border-color: rgba(255, 255, 255, 0.45);
+}
+

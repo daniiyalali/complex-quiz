@@ -1,0 +1,517 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  /* Higher than BottomSheet (300/310) so the leaderboard peek sheet
+     doesn't render through. */
+  z-index: 500;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(20px) saturate(0.7);
+  -webkit-backdrop-filter: blur(20px) saturate(0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: hiw-fade 0.25s var(--spring-clean);
+}
+
+@keyframes hiw-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.card {
+  width: min(500px, 100%);
+  background: var(--surface, #1c1c1e);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0;
+  display: flex;
+  flex-direction: column;
+  animation: hiw-rise 0.38s var(--spring-clean);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+@keyframes hiw-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Mobile: convert popup → bottom drawer.
+   Backdrop pulls content to the bottom edge, card slides up full-width. */
+@media (max-width: 767px) {
+  .backdrop {
+    align-items: flex-end;
+    padding: 0;
+  }
+  .card {
+    width: 100%;
+    max-width: 100%;
+    border: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 16px 16px 0 0;
+    animation: hiw-slide-up 0.42s var(--spring-clean);
+    box-shadow: 0 -20px 60px rgba(0, 0, 0, 0.55);
+    max-height: 92dvh;
+    overflow-y: auto;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+
+@keyframes hiw-slide-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+}
+
+/* ─── header ─── */
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 12px 24px;
+}
+
+.close {
+  width: 28px;
+  height: 28px;
+  border-radius: 14px;
+  background: #2A2E36;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 18px;
+  line-height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: background 160ms, color 160ms;
+}
+.close:hover { background: #3A3F48; color: #fff; }
+
+/* ─── body ─── */
+.body {
+  padding: 8px 28px 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin: 0;
+}
+
+/* ── Step content ────────────────────────────────────────────────────── */
+
+.stepTitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0;
+  color: #fff;
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.stepBody {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.72);
+  margin: 0;
+  text-wrap: pretty;
+}
+
+/* ── Step visuals (shared shell) ────────────────────────────────────── */
+.visual {
+  width: 100%;
+  margin: 4px 0 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* All visuals share the same shell: near-black green-tinted fill, 1px
+   signal-green stroke, 8px corner (gaming-signal palette, 2026-06-11). */
+.timerVisual,
+.weeklyVisual,
+.badgesVisual,
+.lbVisual {
+  background: #07120b;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+}
+
+/* ── Visual 1 — live timer ─────────────────────────────────────────── */
+.timerVisual {
+  padding: 28px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 130px;
+}
+.timerText {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: clamp(52px, 16vw, 80px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--correct, #00ff85);
+  text-shadow: 0 0 14px rgba(0, 255, 133, 0.35);
+  font-variant-numeric: tabular-nums;
+  display: inline-flex;
+  align-items: center;
+}
+.timerColon {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 0.58em;
+  width: 0.22em;
+  margin: 0 0.14em;
+  position: relative;
+  top: -0.04em;
+}
+.timerColon span {
+  width: 0.18em;
+  height: 0.18em;
+  background: var(--correct, #00ff85);
+  display: block;
+  margin: auto;
+}
+.timerColon span + span { margin-top: 0.22em; }
+
+/* ── Visual 2 — weekly tracker ─────────────────────────────────────── */
+.weeklyVisual {
+  padding: 14px 14px;
+  flex-direction: column;
+  min-height: 130px;
+  gap: 10px;
+}
+.weeklyHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  width: 100%;
+  margin-bottom: 6px;
+}
+.weeklyHeadLeft,
+.weeklyHeadRight {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--accent);
+}
+.weeklyGrid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+  width: 100%;
+}
+.weeklyCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  /* Days tick in one-by-one (delay set inline per index), spring-popping into
+     place so the row "fills" toward TODAY. */
+  animation: hiw-cell-pop 0.44s var(--spring-bounce) both;
+}
+@keyframes hiw-cell-pop {
+  from { opacity: 0; transform: scale(0.45); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.weeklyDay {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+}
+.weeklyDayToday {
+  color: #ffd60a;
+}
+.weeklyCell {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 38px;
+  background: rgba(255, 255, 255, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+}
+.weeklyCellDone {
+  background: var(--correct, #00ff85);
+}
+.weeklyCellToday {
+  box-shadow: 0 0 0 2px #07120b, 0 0 0 4px #ffd60a;
+  /* TODAY breathes a couple of times once it lands, drawing the eye to the
+     current day after the row finishes filling. */
+  animation: hiw-today-pulse 1.5s var(--spring-clean) 1s 2;
+}
+@keyframes hiw-today-pulse {
+  0%, 100% { box-shadow: 0 0 0 2px #07120b, 0 0 0 4px #ffd60a; }
+  50%      { box-shadow: 0 0 0 2px #07120b, 0 0 0 7px #ffd60a; }
+}
+.weeklyNudge {
+  margin-top: 4px;
+  padding: 10px 12px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  text-align: center;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #ffd60a;
+}
+
+/* ── Visual 3 — three badges, stacked/layered, vertically + horizontally centered ─ */
+.badgesVisual {
+  padding: 18px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  min-height: 180px;
+  position: relative;
+}
+.badgeImgSide {
+  width: 96px;
+  height: 96px;
+  image-rendering: pixelated;
+  display: block;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.5));
+}
+.badgeImgSide:first-of-type {
+  margin-right: -24px;
+  /* slides out to the left from behind the centre badge */
+  animation: hiw-badge-left 0.55s var(--spring-bounce) 0.26s both;
+}
+.badgeImgSide:last-of-type {
+  margin-left: -24px;
+  animation: hiw-badge-right 0.55s var(--spring-bounce) 0.26s both;
+}
+.badgeImgCenter {
+  width: 144px;
+  height: 144px;
+  image-rendering: pixelated;
+  display: block;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.6));
+  /* hero badge spring-scales in first (like the badge-unlock moment) */
+  animation: hiw-badge-center 0.62s var(--spring-bounce) 0.06s both;
+}
+@keyframes hiw-badge-center {
+  from { opacity: 0; transform: scale(0.4) rotate(-6deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0); }
+}
+@keyframes hiw-badge-left {
+  from { opacity: 0; transform: translateX(34px) scale(0.7); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+@keyframes hiw-badge-right {
+  from { opacity: 0; transform: translateX(-34px) scale(0.7); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+/* ── Visual 4 — top-3 leaderboard ──────────────────────────────────── */
+.lbVisual {
+  padding: 14px 14px 16px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  min-height: 150px;
+  align-items: end;
+}
+.lbEntry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  /* podium positions rise + fade in, ordered 01 → 02 → 03 (delay set inline) */
+  animation: hiw-lb-rise 0.5s var(--spring-clean) both;
+}
+@keyframes hiw-lb-rise {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.lbRank {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.65);
+}
+.lbAvatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #2E2E2E;
+  /* crisp white stroke (user call — the 55% gray read washed out) */
+  border: 2px solid #fff;
+}
+.lbAvatarGold {
+  width: 80px;
+  height: 80px;
+  border-color: #ffd60a;
+  border-width: 3px;
+  /* winner gets a gold ring ripple once the podium has settled */
+  animation: hiw-gold-ring 1.6s var(--spring-clean) 0.5s 2;
+}
+@keyframes hiw-gold-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 214, 10, 0.55); }
+  70%  { box-shadow: 0 0 0 12px rgba(255, 214, 10, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 214, 10, 0); }
+}
+.lbName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: #fff;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  margin-top: 4px;
+}
+.lbNameGold {
+  color: var(--correct, #00ff85);
+}
+.lbScore {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.65);
+  white-space: nowrap;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 12px 17px;
+  background: var(--surface-2, #2c2c2e);
+  border: 1px solid var(--divider, rgba(84, 84, 88, 0.25));
+}
+
+.iconBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.text {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 18px;
+  color: #8F959D;
+  margin: 0;
+}
+
+/* ─── footer ─── */
+.foot {
+  padding: 8px 20px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 5px;
+}
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.2);
+}
+.dotActive {
+  width: 20px;
+  height: 5px;
+  border-radius: 3px;
+  background: #fff;
+}
+
+.next {
+  width: 358px;
+  max-width: 100%;
+  height: 51px;
+  background: #fff;
+  color: #000;
+  border: none;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: background 160ms, transform 140ms var(--spring-clean);
+}
+.next:hover { background: #f0f0f0; }
+.next:active { transform: scale(0.98); }
+
+/* ── Reduced motion: drop every step-visual entrance/idle animation.
+   (The live timer is frozen separately in HowItWorksPopup.tsx.) ── */
+@media (prefers-reduced-motion: reduce) {
+  .weeklyCol,
+  .weeklyCellToday,
+  .badgeImgCenter,
+  .badgeImgSide:first-of-type,
+  .badgeImgSide:last-of-type,
+  .lbEntry,
+  .lbAvatarGold {
+    animation: none;
+  }
+}

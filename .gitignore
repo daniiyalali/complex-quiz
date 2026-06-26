@@ -1,0 +1,35 @@
+# dependencies
+/node_modules
+
+# vendored standalone Node runtime (local only — not an app dependency)
+/.localnode
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# misc
+.DS_Store
+*.pem
+
+# env files
+.env
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# large handoff archive (not part of the app)
+*.zip

@@ -1,0 +1,492 @@
+/* LeaderboardPanel — Editorial-styled right rail */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #000;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.railHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+/* Panel title — house type ramp: 22/600, sentence case (hierarchy by
+   size+weight, never case; the brand mark outranks panel titles). */
+.railTitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+  line-height: 1.15;
+  display: block;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 20px 16px;
+}
+.scroll::-webkit-scrollbar { width: 6px; }
+.scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); }
+
+/* Tabs */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  margin-bottom: 10px;
+}
+.tab {
+  flex: 1;
+  background: none;
+  border: none;
+  padding: 10px 4px;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: color 160ms, border-color 160ms;
+}
+.tab:hover { color: #fff; }
+.tabActive {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Scope */
+.scope {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  margin-bottom: 14px;
+}
+.scopeBtn {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.55);
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1), border-color 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.scopeBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: translateX(-101%);
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+.scopeBtn:hover:not(.scopeActive)::before { transform: translateX(0); }
+.scopeBtn:hover:not(.scopeActive) { color: #000; border-color: #fff; }
+.scopeActive {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* Stats */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* Grey surface base (matches the home leaderboard stats + the profile DP
+     card) instead of a hairline outline on bare black. */
+  background: var(--surface-2);
+  border-radius: var(--radius-btn);
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+.statCell {
+  padding: 14px 8px;
+  text-align: center;
+}
+.statCellBordered {
+  border-left: 0.5px solid var(--divider);
+}
+.statNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 26px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  line-height: 1;
+}
+.statLbl {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9.5px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 6px;
+}
+
+/* Podium */
+.podium {
+  margin-bottom: 22px;
+}
+.podiumHeader {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.podiumRow {
+  display: flex;
+  align-items: end;
+  justify-content: center;
+  gap: 8px;
+  /* clearance for the crown riding above the #1 avatar */
+  padding-top: 18px;
+}
+.podiumCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+.podiumGold { flex: 1.15; }
+
+/* Real podium slots are buttons — they open the player's full profile */
+.podiumColBtn {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  cursor: pointer;
+}
+.podiumColBtn:hover .podiumCard {
+  border-color: rgba(0, 255, 133, 0.9);
+}
+.podiumColBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+/* Avatar overlaps the card top (negative margin set inline per size) */
+.avatarWrap {
+  position: relative;
+  z-index: 1;
+}
+.crown {
+  position: absolute;
+  top: -17px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #ffd60a;
+  fill: #ffd60a;
+  filter: drop-shadow(0 1px 4px rgba(255, 214, 10, 0.45));
+}
+.podiumAvatar {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #111;
+  /* dark gap ring + red outline — the red hint in the rank trio */
+  border: 2px solid #000;
+  outline: 2.5px solid rgba(255, 69, 58, 0.9);
+}
+.rankBadge {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffd60a;
+  color: #1a1400;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  border: 2px solid #000;
+}
+
+/* Green-stroked card behind the avatar */
+.podiumCard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  padding: 0 6px 10px;
+  background: rgba(0, 255, 133, 0.07);
+  border: 1px solid rgba(0, 255, 133, 0.38);
+  border-radius: var(--radius-card-sm, 12px);
+}
+.cardGold {
+  background: rgba(0, 255, 133, 0.11);
+  border-color: rgba(0, 255, 133, 0.65);
+  box-shadow: 0 0 22px rgba(0, 255, 133, 0.1);
+}
+
+.podiumName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
+  text-transform: uppercase;
+  color: var(--correct);
+}
+
+.pedScore {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  margin-top: 3px;
+  color: #fff;
+}
+.pedScoreGold { font-size: 24px; }
+
+.pedTime {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  margin-top: 1px;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* List */
+.listBlock { margin-bottom: 8px; }
+.listKicker {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.list {
+  display: flex;
+  flex-direction: column;
+}
+.listRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 8px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: left;
+  cursor: pointer;
+  transition: background 200ms ease;
+  font-family: inherit;
+  color: inherit;
+}
+.listRow:hover { background: rgba(255, 255, 255, 0.10); }
+
+/* You-in-list — distinct from row click target */
+.listRowYou {
+  background: rgba(255, 255, 255, 0.14);
+  cursor: default;
+  border-left: 3px solid var(--accent);
+  padding-left: 4px;
+}
+.listRowYou:hover { background: rgba(255, 255, 255, 0.14); }
+.listRowYou .listRank { color: var(--accent); }
+.listRowYou .listName { color: var(--accent); }
+.listRank {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  font-variant-numeric: tabular-nums;
+  min-width: 24px;
+}
+.listAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.listName {
+  flex: 1;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.listStats {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0;
+}
+
+/* Sticky YOU bar — also a button that flips the rail to Profile */
+.you {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  background: linear-gradient(90deg, var(--accent) 0%, #E6E6E6 100%);
+  color: #000;
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-bottom-left-radius: 19px;
+  border-bottom-right-radius: 19px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  width: 100%;
+  transition: filter 160ms;
+}
+.you:hover { filter: brightness(1.08); }
+.you:focus-visible { outline: 2px solid #000; outline-offset: -4px; }
+/* Volt bar → all text/avatar ring must be dark for contrast (was white). */
+.you .youRank, .you .youName, .you .youStats { color: #000; }
+.you .youMeta { color: rgba(0, 0, 0, 0.62); }
+.you .youAvatar { border-color: rgba(0, 0, 0, 0.4); }
+.youRank {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 28px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.youAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #fff;
+  object-fit: cover;
+}
+.youBody {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.youName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.youMeta {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.youStats {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  letter-spacing: 0;
+}
+
+/* ── Empty / sparse board states ─────────────────────────────────────────── */
+
+/* dev: demo the board population (Full / 1–2 played / Empty) */
+/* Top-right toggle into the read-only profile + badges view (replaced the old
+   Full/1-2/Empty dev toggle, 2026-06-17). Sharp corners per house rule. */
+.headProfileBtn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  color: #fff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 160ms var(--spring-clean), border-color 160ms var(--spring-clean);
+}
+.headProfileBtn:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.32); }
+
+/* Ghost podium slot — open/unclaimed position (same card anatomy, dashed) */
+.ghostAvatar { border-radius: 50%; border: 2px dashed rgba(255, 255, 255, 0.22); background: #000; display: grid; place-items: center; color: rgba(255, 255, 255, 0.4); font-family: var(--font-doto), monospace; font-weight: 900; font-size: 22px; }
+.ghostCard { background: transparent; border: 1.5px dashed rgba(255, 255, 255, 0.16); box-shadow: none; }
+.ghostName { font-family: var(--font-inter), Inter, sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; color: rgba(255, 255, 255, 0.3); text-align: center; }
+.ghostRank { font-family: var(--font-inter), Inter, sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0; font-variant-numeric: tabular-nums; color: rgba(255, 255, 255, 0.35); margin-top: 2px; }
+
+/* "Be first" empty message */
+.beFirst { text-align: center; padding: 20px 16px 8px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.beFirstTitle { font-family: var(--font-inter), Inter, sans-serif; font-size: 15px; font-weight: 800; letter-spacing: 0; color: #fff; }
+.beFirstSub { font-family: var(--font-inter), Inter, sans-serif; font-size: 12.5px; color: rgba(255, 255, 255, 0.55); margin-bottom: 14px; }
+.beFirstCta { padding: 12px 22px; background: var(--accent); color: #000; border: none; border-radius: 8px; font-family: var(--font-inter), Inter, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0; text-transform: uppercase; cursor: pointer; transition: background 160ms var(--spring-clean); }
+.beFirstCta:hover { background: #E6E6E6; }
+
+/* Ghost YOU bar (logged-out / no account) */
+.youGhost { flex-shrink: 0; width: 100%; padding: 16px 20px; background: transparent; border: 1px dashed rgba(255, 255, 255, 0.28); border-left: 0; border-right: 0; border-bottom: 0; color: rgba(255, 255, 255, 0.75); font-family: var(--font-inter), Inter, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; cursor: pointer; text-align: center; transition: border-color 160ms, color 160ms; }
+.youGhost:hover { border-top-color: var(--accent); color: #fff; }

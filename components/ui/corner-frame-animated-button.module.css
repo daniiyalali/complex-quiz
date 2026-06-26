@@ -1,0 +1,100 @@
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: 0;
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  outline: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: background 200ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* Corner brackets — 4 L-shapes via 8 stacked linear-gradients */
+.brackets {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(to right,  var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to right,  var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to left,   var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to left,   var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to bottom, var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to top,    var(--accent) 1.5px, transparent 1.5px),
+    linear-gradient(to top,    var(--accent) 1.5px, transparent 1.5px);
+  background-position:
+    0 0,
+    0 100%,
+    100% 0,
+    100% 100%,
+    0 0,
+    100% 0,
+    0 100%,
+    100% 100%;
+  background-size: 15px 15px;
+  background-repeat: no-repeat;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.fill_default { background: linear-gradient(90deg, #4F46E5, #9333EA, #DB2777); }
+.fill_purple  { background: linear-gradient(90deg, rgba(255, 255, 255,0.16), rgba(255, 255, 255,0.05)); }
+.fill_orange  { background: linear-gradient(90deg, #F97316, #DC2626); }
+.fill_white   { background: #fff; }
+/* Signal green — the "go" CTA (CEO gaming-signals direction) */
+.fill_signal  { background: linear-gradient(90deg, #00FF85, #00C46A); }
+
+.label {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+/* Mobile: button reads purple at rest (matches the editorial accent) */
+@media (max-width: 767px) {
+  .btn {
+    background: linear-gradient(90deg, rgba(255, 255, 255,0.16), rgba(255, 255, 255,0.05));
+    color: #fff;
+  }
+  .btn:hover { background: linear-gradient(90deg, rgba(255, 255, 255,0.16), rgba(255, 255, 255,0.05)); }
+}
+
+/* Signal variant: green is the resting state on mobile (no hover there) */
+@media (max-width: 767px) {
+  .btnSignal,
+  .btnSignal:hover {
+    background: linear-gradient(90deg, #00FF85, #00C46A);
+    color: #000;
+    font-weight: 700;
+  }
+  /* white corner brackets read as noise on the solid green plate */
+  .btnSignal .brackets { opacity: 0 !important; }
+}

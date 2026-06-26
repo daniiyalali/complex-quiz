@@ -1,0 +1,1680 @@
+/* ─── EditorialLayout — Figma node 68:3491 ─────────────────────────────────
+   Layout proportions match the Figma canvas exactly:
+     - Canvas: 1888×1100
+     - Cabinet: 1302×869
+     - Stats strip: 1302×166 (under cabinet)
+     - Leaderboard sidebar: 503×966 (right column)
+   Desktop ≥1024px: 2-col grid at ~72/28 ratio.
+   Mobile <1024px: single column stack.
+   Fonts loaded via root layout: --font-doto, --font-inter, --font-space-mono.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.page {
+  min-height: 100vh;
+  background: #000;
+  color: #fff;
+  /* top inset clears the fixed Complex Playground bar (56px / 52px mobile) */
+  padding: 72px 16px 16px;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  box-sizing: border-box;
+  position: relative;
+}
+@media (max-width: 600px) {
+  .page { padding-top: 64px; }
+}
+
+/* Footer escapes the page padding so it runs edge-to-edge. Desktop only —
+   on mobile the footer lives at the END of the leaderboard sheet's scroll
+   (see .sheetFooterBleed), so the home cabinet stays a locked app screen. */
+.footerBleed {
+  margin: 32px -16px -16px;
+}
+@media (max-width: 1023px) {
+  .footerBleed { display: none; }
+}
+
+/* Footer inside the mobile sheet: bleeds past .sheetInner padding so it
+   runs edge-to-edge and closes the sheet's scroll after the rankings. */
+.sheetFooterBleed {
+  margin: 28px -14px -24px;
+}
+
+/* Mobile (under 1024px): hide the desktop sidebar; the BottomSheet replaces it */
+@media (max-width: 1023px) {
+  .sidebar { display: none !important; }
+
+  /* Lock the page to the viewport — no document scroll. Cabinet + sheet share
+     100dvh; the footer lives inside the sheet's own scroll instead.
+     Zero horizontal padding so the photo + strip can bleed to viewport edges. */
+  .page {
+    height: 100dvh;
+    min-height: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+  /* Cabinet itself has no visible border on mobile — the photo and strip
+     bleed to viewport edges and the strip's own border provides structure. */
+  .cabinet {
+    border: 0;
+    border-radius: 0;
+  }
+
+  /* Cabinet fills the area above the 216px leaderboard peek sheet, with a
+     12px breathing band so the cabinet bottom doesn't kiss the leaderboard.
+     The 60px term clears the fixed Playground bar (page padding-top). */
+  .grid {
+    height: calc(100dvh - 216px - 12px - 60px);
+    overflow: hidden;
+    gap: 0;
+    padding: 0 0 12px;
+  }
+
+  .leftCol {
+    height: 100%;
+    overflow: hidden;
+    gap: 0;
+  }
+
+  /* Cabinet stretches to fill the column instead of locking to its 1302/869 desktop ratio */
+  .cabinet {
+    aspect-ratio: auto;
+    flex: 1 1 0;
+    min-height: 0;
+    border-radius: 14px;
+  }
+
+  /* Mobile cabinet — proximity / alignment / repetition / hierarchy:
+     - identity (logo + subtitle) tight, anchored at top
+     - photo + meta + CTA flow with consistent rhythm via gap
+     - streak strip anchored to bottom via margin-top: auto, with clear
+       breathing room (cabinet bottom padding + grid bottom padding) */
+  .cabinetContent {
+    gap: 12px;
+    padding: 22px 18px 18px;
+    justify-content: flex-start;
+  }
+
+  .presentsRow { margin-bottom: 0; }
+
+  .cq { font-size: clamp(56px, 17vw, 108px); }
+  .quizLogo { width: clamp(170px, 46vw, 230px); }
+  .subtitle { font-size: 14px; margin: 6px 0 0; letter-spacing: 0; }
+  .dateLine {
+    font-family: var(--font-inter), Inter, sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    margin: 10px 0 0;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.92);
+  }
+  .theme {
+    font-size: clamp(36px, 9.5vw, 44px);
+    margin: 6px 0 0;
+    letter-spacing: -0.01em;
+    font-weight: 800;
+  }
+  .startBtn { min-width: 0; width: 100%; margin-top: 12px; }
+  .howItWorks {
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 14px;
+    letter-spacing: 0;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  /* Photo flexes inside the leftover column space — the RATIO is locked
+     (same 920/340 band as desktop) and the box scales, never crops. It
+     absorbs height shortage so the logo / START / strip never get squeezed. */
+  .photoBox {
+    flex: 1 1 0;
+    min-height: 96px;
+    max-height: 240px;
+    width: auto;
+    max-width: 100%;
+    align-self: center;
+    aspect-ratio: 920 / 340;
+    margin: 10px 0 0;
+  }
+
+  /* Strip anchors to bottom of cabinet, bleeds to viewport edges to match the
+     photo width above. Drops desktop's margin-top: 20px override. */
+  .streakStrip {
+    margin-top: auto;
+    margin-left: -18px;
+    margin-right: -18px;
+    margin-bottom: -18px;
+    width: calc(100% + 36px);
+    border-left: 0;
+    border-right: 0;
+    border-radius: 0;
+  }
+  .streakStripCol { padding: 18px 22px; gap: 6px; }
+  .streakStripNum { font-size: 36px; }
+  .streakStripLabel { font-size: 13px; letter-spacing: 0; }
+  .streakStripFlameIcon { width: 28px; height: 33px; }
+  .streakStripBadgeIcon { width: 30px; height: 30px; }
+
+  /* Cabinet pips — slightly larger on mobile so they're tappable + readable */
+  .cabinetPips { top: 12px; right: 12px; gap: 8px; }
+  .cabinetPip { height: 34px; padding: 0 12px; font-size: 15px; gap: 7px; }
+  .cabinetPipFireIcon { width: 15px; height: 17px; }
+  .cabinetPipBadgeIcon { width: 16px; height: 16px; }
+}
+
+/* Tighten further on small phones */
+@media (max-width: 480px) {
+  .cabinetContent { padding: 20px 14px 14px; gap: 8px; }
+  .photoBox {
+    margin: 8px 0 0;
+  }
+  .streakStrip {
+    margin-left: -14px;
+    margin-right: -14px;
+    margin-bottom: -14px;
+    width: calc(100% + 28px);
+  }
+  .cq { font-size: clamp(52px, 16vw, 88px); }
+  .quizLogo { width: clamp(160px, 46vw, 210px); }
+  .dateLine { font-size: 14px; margin-top: 8px; }
+  .theme { font-size: clamp(32px, 9vw, 40px); }
+  .startBtn { margin-top: 10px; }
+  .howItWorks { margin-top: 10px; }
+  .streakStripCol { padding: 14px 18px; gap: 4px; }
+  .streakStripNum { font-size: 24px; }
+  .streakStripArrow { font-size: 20px; margin-left: 10px; }
+}
+
+
+/* ─── BottomSheet-internal styles for mobile leaderboard ─── */
+.sheetHead {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px 4px;
+}
+.sheetTitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  color: #fff;
+  margin: 0;
+  padding: 0 4px 0;
+  text-align: center;
+}
+.sheetBackBtn {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: 0;
+  color: var(--accent);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 6px;
+}
+.sheetBackBtn:hover { color: #fff; }
+.sheetInner {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 14px 24px;
+}
+.sheetPodiumHeader {
+  margin: 2px 0 8px;
+  text-align: center;
+  font-size: 10px;
+}
+.sheetPodium {
+  margin-bottom: 18px;
+}
+/* Inside the sheet: same card anatomy at near-desktop scale so the full
+   top 3 fits the 216px peek without covering the cabinet's streak strip.
+   Only the type sizes get a small mobile bump. */
+.sheetPodium { padding-top: 22px; }
+.sheetPodium .podiumName { font-size: 12px; }
+.sheetPodium .podiumScore { font-size: 20px; }
+.sheetPodium .podiumEntryGold .podiumScore { font-size: 24px; }
+.sheetPodium .podiumTime { font-size: 11px; }
+
+.sheetBelowFold {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.sheetTabs { width: 100%; }
+.sheetStats { width: 100%; }
+.sheetRankingsHeader { margin: 4px 0 6px; }
+.sheetRankings { padding-bottom: 8px; }
+
+@media (min-width: 1024px) {
+  .page {
+    /* App frame fills the viewport (grid gets an explicit viewport-derived
+       height below); the document can scroll past it to the site footer. */
+    min-height: 100vh;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
+  margin: 0;
+  /* sit above the fixed HomeBackdrop dot-matrix layer */
+  position: relative;
+  z-index: 1;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: minmax(0, 1302fr) minmax(380px, 503fr);
+    /* app-frame height: viewport minus the page's 72px top / 16px bottom
+       padding — sidebar still scrolls internally; footer sits below. */
+    height: calc(100vh - 88px);
+    flex-shrink: 0;
+    align-items: stretch;
+  }
+}
+
+/* ─── LEFT COLUMN: cabinet + stats ─── */
+
+.leftCol {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+  min-height: 0;
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .leftCol { height: 100%; }
+}
+
+/* Cabinet — at desktop flexes to fill remaining leftCol height; at mobile uses aspect-ratio */
+.cabinet {
+  position: relative;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 1302 / 869;
+  min-height: 480px;
+}
+
+@media (min-width: 1024px) {
+  .cabinet {
+    flex: 1 1 0;
+    aspect-ratio: auto;
+    min-height: 0;
+  }
+}
+
+/* Pixel trail layer — only inside the cabinet */
+.pixelStage {
+  position: absolute;
+  inset: 0;
+  /* Above .cabinetContent (z-index 2) so the trail paints over the hero photo
+     and copy alike; exclusion blend gives the trippy inversion over the image.
+     No gooey filter — cells stay crisp. */
+  z-index: 3;
+  mix-blend-mode: exclusion;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.cabinetContent {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(8px, 1vw, 16px);
+  padding: clamp(24px, 3vw, 48px) clamp(24px, 5vw, 80px);
+  text-align: center;
+}
+
+.presentsRow {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.complexWordmark {
+  width: 56px;
+  height: 14px;
+  display: block;
+  flex-shrink: 0;
+}
+
+@media (min-width: 1024px) {
+  .complexWordmark {
+    width: 90px;
+    height: 23px;
+  }
+}
+
+.presents {
+  font-family: var(--font-space-mono), monospace;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.cq {
+  font-family: var(--font-doto), monospace;
+  font-weight: 900;
+  font-size: clamp(64px, 9vw, 160px);
+  line-height: 0.78;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin: 0;
+}
+
+/* COMPLEX QUIZ wordmark — replaces the old COMPLEX PRESENTS + CQ stack.
+   327×96 native, so width drives height via natural aspect.
+   Sized at ~70% of original spec per user request. */
+.quizLogo {
+  display: block;
+  width: clamp(154px, 26vw, 364px);
+  height: auto;
+  image-rendering: pixelated;
+}
+
+/* Bigger header lockup on mobile. Declared after the base rule above so it
+   actually applies — the earlier max-width media overrides for .quizLogo are
+   shadowed by that base rule (same specificity, later in source). */
+@media (max-width: 1023px) {
+  .quizLogo { width: clamp(270px, 72vw, 414px); }
+}
+
+.subtitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 0;
+  color: #fff;
+  margin: 4px 0 0;
+  text-transform: uppercase;
+}
+
+.photoBox {
+  position: relative;
+  width: min(60vw, 920px);
+  aspect-ratio: 920 / 340;
+  /* NEVER crop: the ratio is locked — if space is short the box scales
+     proportionally (width), it doesn't compress into a strip. */
+  flex-shrink: 0;
+  overflow: hidden;
+  margin: 8px 0;
+  background: #000;
+}
+/* Played state packs more content into the viewport-locked cabinet — the
+   photo shrinks proportionally (same 920/340 ratio, narrower width). */
+.cabinetPlayed .photoBox {
+  width: min(42vw, 600px);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.dateLine {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.slash {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+  display: inline-block;
+  padding: 0 6px;
+}
+
+.theme {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 2.2vw, 30px);
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Just layout — CornerFrameAnimatedButton brings its own visual styling */
+.startBtn {
+  margin-top: 8px;
+  min-width: 240px;
+  animation: startNudge 3.6s ease-in-out 1.2s infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+.startBtn:hover,
+.startBtn:focus-within {
+  animation-play-state: paused;
+}
+
+@keyframes startNudge {
+  0%, 70%, 100% { transform: scale(1); }
+  78%  { transform: scale(1.035); }
+  86%  { transform: scale(1); }
+  92%  { transform: scale(1.02); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .startBtn { animation: none; }
+}
+
+/* Guest-only nudge under START — playing is free, signing in is what saves it */
+.signInSave {
+  margin-top: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border, rgba(84, 84, 88, 0.45));
+  border-radius: var(--radius-btn, 10px);
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0;
+  cursor: pointer;
+  padding: 10px 16px;
+  transition: color var(--dur-snap, 200ms) ease, border-color var(--dur-snap, 200ms) ease,
+    transform var(--dur-snap, 200ms) var(--spring-snap, cubic-bezier(0.34, 1.9, 0.64, 1));
+}
+.signInSave:hover {
+  color: var(--text, #fff);
+  border-color: var(--text-3, rgba(235, 235, 245, 0.3));
+}
+.signInSave:active {
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .signInSave:active {
+    transform: none;
+  }
+}
+
+.howItWorks {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 0;
+  color: #fff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  padding: 4px 8px;
+  transition:
+    transform var(--dur-release) var(--ease-apple-spring),
+    opacity var(--dur-hover) var(--ease-apple-standard);
+}
+.howItWorks:hover { opacity: 0.7; }
+.howItWorks:active {
+  transform: scale(0.95);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+
+.alertIcon {
+  width: 19px;
+  height: 19px;
+  image-rendering: pixelated;
+}
+
+/* ─── CABINET PIPS — top-right floating chips inside the cabinet ─── */
+
+.cabinetPips {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 3;
+  display: flex;
+  gap: 8px;
+}
+
+.cabinetPip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 14px;
+  background: rgba(26, 2, 24, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  color: #fff;
+  font-family: var(--font-inter), sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, transform 100ms ease;
+}
+.cabinetPip:hover {
+  /* neutral gray hover — the old #1A0218 magenta tint is retired */
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--accent);
+}
+.cabinetPip:active {
+  background: rgba(255, 255, 255, 0.16);
+}
+.cabinetPip:active { transform: scale(0.97); }
+.cabinetPip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.cabinetPipFireIcon {
+  width: 16px;
+  height: 19px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.cabinetPipBadgeIcon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.cabinetPipNum {
+  font-variant-numeric: tabular-nums;
+}
+
+.cabinetPipPulse {
+  animation: cabinetPipPulse 2.4s ease-in-out infinite;
+}
+@keyframes cabinetPipPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 255, 255, 0.18); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cabinetPipPulse { animation: none; }
+}
+
+/* ─── BOTTOM-ANCHOR STREAK + BADGES STRIP ─── */
+
+.streakStrip {
+  width: 100%;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  min-height: 72px;
+  /* Never let the flex parent squeeze the strip below its content — the
+     taller NEXT BADGE column (ring + label + hint) must stay inside the card. */
+  flex-shrink: 0;
+  padding: 0;
+  background: #141418;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition:
+    transform var(--dur-release) var(--ease-apple-spring),
+    background var(--dur-hover) var(--ease-apple-standard),
+    border-color var(--dur-hover) var(--ease-apple-standard);
+  will-change: transform;
+}
+.streakStrip:hover {
+  /* neutral gray — the #200020 magenta tint is retired with the pink palette */
+  background: #1d1d20;
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.streakStrip:active {
+  transform: scale(0.985);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+.streakStrip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.streakStripCol {
+  position: relative;
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-width: 0;
+  /* Reset button-default styling so each column reads as a clickable slice
+     of the strip, not a chrome button. */
+  background: transparent;
+  border: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  transition:
+    background var(--dur-hover) var(--ease-apple-standard),
+    transform var(--dur-release) var(--ease-apple-spring);
+  will-change: transform;
+}
+.streakStripCol:hover { background: rgba(255, 255, 255, 0.08); }
+.streakStripRingCol { align-items: center; justify-content: center; text-align: center; gap: 8px; }
+.streakStripRingCol .streakStripLabel { max-width: 15ch; line-height: 1.15; }
+.streakStripHint {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+  text-align: center;
+  white-space: nowrap;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+.streakStripCol:active {
+  /* press reads distinct from hover: deeper gray + the scale dip */
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.985);
+  transition: transform var(--dur-press) var(--ease-apple-accel);
+}
+.streakStripCol:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+.streakStripCol:first-child {
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.streakStripRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.streakStripFlameIcon {
+  width: 18px;
+  height: 21px;
+  display: block;
+  image-rendering: pixelated;
+}
+.streakStripBadgeIcon {
+  width: 20px;
+  height: 20px;
+  display: block;
+  image-rendering: pixelated;
+}
+
+.streakStripNum {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: #FFFFFF;
+  letter-spacing: -0.02em;
+}
+
+.streakStripLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+
+.streakStripArrow {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--accent);
+  margin-left: 14px;
+  line-height: 1;
+}
+
+/* ─── RIGHT COLUMN: leaderboard sidebar ─── */
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 1.8vw, 32px);
+  padding: clamp(20px, 1.8vw, 28px);
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  /* Internal scroll — page itself doesn't scroll */
+  overflow-y: auto;
+  box-sizing: border-box;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  container-type: inline-size;
+  container-name: sidebar;
+}
+
+@media (min-width: 1024px) {
+  .sidebar {
+    /* Fill grid row height (matches leftCol via align-items: stretch) */
+    height: 100%;
+    /* Allow grid to size to leftCol; sidebar content scrolls inside */
+    max-height: 100%;
+  }
+}
+
+.sidebar::-webkit-scrollbar { width: 6px; }
+.sidebar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+
+/* Mobile sidebar visibility handled by the .sidebar { display: none } rule near the top of this file. */
+
+/* Leaderboard title row + demo state chip (chip floats top-right so the
+   centered title is undisturbed). */
+.lbHead { position: relative; }
+.lbStateChip {
+  position: absolute; top: 2px; right: 0; z-index: 2;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0; text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.06); border-radius: 999px;
+  padding: 4px 10px; cursor: pointer;
+}
+.lbStateChip:hover { color: #fff; }
+
+/* Panel title — house type ramp (22/600 sentence case); the giant
+   container-query display title outranked the brand logo (user call). */
+.lbTitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  word-break: keep-all;
+}
+
+/* Period tabs */
+.tabs {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.tab {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  padding: 11px 4px;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.tab:hover { color: #fff; }
+
+.tabActive {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+/* Scope sub-tabs */
+.scopeTabs {
+  display: flex;
+  gap: 4px;
+}
+
+.scope {
+  flex: 1;
+  height: 29px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0 8px;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 280ms var(--spring-clean), border-color 280ms var(--spring-clean);
+}
+.scope::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: translateX(-101%);
+  transition: transform 320ms var(--spring-clean);
+  z-index: -1;
+  pointer-events: none;
+}
+.scope:hover:not(.scopeActive)::before { transform: translateX(0); }
+.scope:hover:not(.scopeActive) { color: #000; border-color: #fff; }
+
+.scopeActive {
+  background: #fff;
+  color: #000;
+  border-color: #fff;
+}
+
+/* Stats grid — single dark-grey container with subtle internal dividers.
+   Replaces the previous hairline white outer border. */
+.lbStats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  background: var(--surface-2);
+  border-radius: var(--radius-btn);
+  /* min-height, not height — a fixed 67px clipped the Doto numerals on
+     mobile (user-reported). The radius doesn't need overflow:hidden. */
+  min-height: 67px;
+}
+
+.lbStatCell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 5px;
+  padding: 8px;
+}
+
+.lbStatCellDivider {
+  border-left: 0.5px solid var(--divider);
+}
+
+.lbStatNum {
+  font-family: var(--font-doto), monospace;
+  font-weight: 900;
+  font-size: 22px;
+  line-height: 1;
+  color: #fff;
+}
+
+.lbStatLabel {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 9.5px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* "You've been challenged" banner — shown when arriving via the /c link */
+.challengedBanner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  align-self: center;
+  margin-bottom: 14px;
+  padding: 9px 16px;
+  border: 1px solid rgba(0, 255, 133, 0.55);
+  border-radius: 999px;
+  background: rgba(0, 255, 133, 0.08);
+  color: var(--correct, #00ff85);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-align: center;
+  text-transform: uppercase;
+  box-shadow: 0 0 18px rgba(0, 255, 133, 0.12);
+}
+.challengedDot {
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--correct, #00ff85);
+  box-shadow: 0 0 8px rgba(0, 255, 133, 0.8);
+  animation: challengedPulse 1.6s var(--spring-clean) infinite;
+}
+@keyframes challengedPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.35; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .challengedDot { animation: none; }
+}
+
+/* Top 3 podium */
+.podiumHeader {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin: 0;
+}
+
+.podium {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr 1fr;
+  align-items: end;
+  gap: 8px;
+  /* clearance for the crown riding above the #1 avatar */
+  padding-top: 20px;
+}
+
+.podiumEntry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 0;
+}
+
+/* Avatar overlaps the card top; rank chip + crown ride on it */
+.podiumAvatarWrap {
+  position: relative;
+  z-index: 1;
+  display: block;
+}
+.podiumEntrySm .podiumAvatarWrap { margin-bottom: -26px; }
+.podiumEntryXs .podiumAvatarWrap { margin-bottom: -23px; }
+.podiumEntryGold .podiumAvatarWrap { margin-bottom: -32px; }
+
+.podiumAvatar {
+  display: block;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #111;
+  /* dark gap ring + red outline — the red hint in the rank trio */
+  border: 2px solid #000;
+  outline: 2.5px solid rgba(255, 69, 58, 0.9);
+}
+.podiumEntrySm .podiumAvatar { width: 52px; height: 52px; }
+.podiumEntryXs .podiumAvatar { width: 46px; height: 46px; }
+.podiumEntryGold .podiumAvatar { width: 64px; height: 64px; }
+
+.crownIcon {
+  position: absolute;
+  top: -21px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 26px;
+  image-rendering: pixelated;
+  filter: drop-shadow(0 1px 4px rgba(255, 214, 10, 0.45));
+}
+
+.podiumRankChip {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffd60a;
+  color: #1a1400;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  border: 2px solid #000;
+}
+
+/* Green-stroked card behind the avatar */
+.podiumCard {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+  background: rgba(0, 255, 133, 0.07);
+  border: 1px solid rgba(0, 255, 133, 0.38);
+  border-radius: var(--radius-card-sm, 12px);
+}
+.podiumEntrySm .podiumCard { min-height: 98px; padding: 34px 6px 10px; }
+.podiumEntryXs .podiumCard { min-height: 90px; padding: 31px 6px 10px; }
+.podiumEntryGold .podiumCard {
+  min-height: 118px;
+  padding: 40px 6px 10px;
+  background: rgba(0, 255, 133, 0.11);
+  border-color: rgba(0, 255, 133, 0.65);
+  box-shadow: 0 0 22px rgba(0, 255, 133, 0.1);
+}
+
+.podiumName {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: var(--correct);
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
+  padding: 0 2px;
+}
+
+.podiumScore {
+  font-family: var(--font-doto), monospace;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+  margin-top: 3px;
+}
+.podiumEntryGold .podiumScore { font-size: 22px; }
+
+.podiumTime {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  margin-top: 1px;
+}
+
+/* Rankings list */
+.rankingsHeader {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0 0 4px;
+}
+
+.rankings {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.rankRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 9px 10px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+.rankRow:hover { background: rgba(255, 255, 255, 0.10); }
+.rankRow:last-child { border-bottom: 0; }
+
+.rankNum {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: #fff;
+  width: 28px;
+  flex-shrink: 0;
+}
+
+.rankAvatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  object-fit: cover;
+  display: block;
+}
+
+.rankName {
+  flex: 1;
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0;
+  color: #fff;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rankScore {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  letter-spacing: 0;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+/* ───────────────────────────────────────────────────────────────────────
+   FINAL MOBILE OVERRIDES (after base rules — cascade order matters).
+   The whole cabinet — logo, photo, theme, START, HOW IT WORKS, and the
+   streak/badges strip — sits inside ONE rounded magenta-stroked container.
+   Photo + strip bleed to the cabinet's inner edges (clipped by the cabinet's
+   overflow:hidden + radius). The strip has only a 1px magenta top border
+   acting as an internal divider — the cabinet's outer border wraps it.
+   ─────────────────────────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  .page {
+    /* 52px fixed Playground bar + 8px breathing room */
+    padding: 60px 8px 0;
+  }
+  .cabinet {
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .photoBox {
+    width: calc(100% + 36px);
+    margin: 14px -18px 0;
+    aspect-ratio: 16 / 9;
+  }
+  .streakStrip {
+    margin-top: auto;
+    margin-left: -18px;
+    margin-right: -18px;
+    margin-bottom: -18px;
+    width: calc(100% + 36px);
+    border: 0;
+    border-top: 1px solid var(--accent);
+    border-radius: 0;
+    background: transparent;
+  }
+  .streakStripCol { padding: 18px 22px; gap: 6px; }
+  .streakStripCol:first-child { border-right: 1px solid var(--accent); }
+  .streakStripNum { font-size: 36px; }
+  .streakStripLabel { font-size: 13px; letter-spacing: 0; }
+  .streakStripFlameIcon { width: 28px; height: 33px; }
+  .streakStripBadgeIcon { width: 30px; height: 30px; }
+}
+
+@media (max-width: 480px) {
+  .photoBox {
+    width: calc(100% + 28px);
+    margin: 10px -14px 0;
+  }
+  .streakStrip {
+    margin-left: -14px;
+    margin-right: -14px;
+    margin-bottom: -14px;
+    width: calc(100% + 28px);
+  }
+}
+
+/* ═══ EDITORIAL SPLIT CABINET (2026-06-11 redesign, per Anusha's mock) ═══
+   Left-aligned copy column · hero photo right (desktop); photo-first stack
+   on mobile. Game cards replace the old two-cell streak strip on desktop. */
+
+.cabinetMain {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-height: 0;
+  width: 100%;
+}
+
+.cabinetCopy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 12px;
+  min-width: 0;
+}
+
+.cabinetHero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #000;
+}
+.cabinetHeroImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.photoCredit {
+  position: absolute;
+  right: 12px;
+  bottom: 10px;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.eyebrow {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--correct, #00ff85);
+  margin: 0;
+}
+
+.themeSub {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0;
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* Solid signal-green START (mock direction — green at rest everywhere) */
+.startQuiz {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 420px;
+  padding: 15px 24px;
+  background: linear-gradient(90deg, #00ff85, #00c46a);
+  border: 0;
+  border-radius: 0;
+  color: #000;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: filter 160ms var(--spring-clean);
+  margin-top: 6px;
+}
+.startQuiz:hover { filter: brightness(1.08); }
+
+/* ── Game cards (desktop) ── */
+.gameCards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+  margin-top: 16px;
+  flex-shrink: 0;
+}
+.gameCard {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  padding: 14px 16px;
+  background: var(--surface, #1c1c1e);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: var(--radius-card-sm, 12px);
+  color: #fff;
+  font: inherit;
+  cursor: default;
+  min-width: 0;
+  transition: background var(--dur-snap, 200ms) var(--spring-clean),
+    border-color var(--dur-snap, 200ms) var(--spring-clean),
+    transform var(--dur-snap, 200ms) var(--spring-clean),
+    box-shadow var(--dur-snap, 200ms) var(--spring-clean);
+}
+/* Claim-badge notification — orange count pip on the Badges controls when
+   leaderboard badges are waiting to be claimed. */
+.claimDot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #ff9500;
+  color: #1a0f00;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1;
+  border-radius: 999px;
+  border: 2px solid var(--bg, #000);
+  animation: claimPulse 1.8s var(--spring-clean) infinite;
+}
+@keyframes claimPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.14); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .claimDot { animation: none; }
+}
+
+/* First two cards are clickable — a system-orange stroke + hover lift signal it;
+   the third (Next badge) is a static preview keeping the default faint border. */
+.gameCardClickable {
+  cursor: pointer;
+  border-color: rgba(255, 149, 0, 0.5);
+}
+.gameCardClickable:hover {
+  background: #232326;
+  border-color: var(--streak, #ff9500);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -10px rgba(255, 149, 0, 0.42);
+}
+.gameCardClickable:active { transform: translateY(0) scale(0.99); background: #2a2a2e; }
+.gameCardClickable:focus-visible { outline: 2px solid var(--streak, #ff9500); outline-offset: 2px; }
+@media (prefers-reduced-motion: reduce) {
+  .gameCardClickable:hover, .gameCardClickable:active { transform: none; }
+}
+.gameCardFlame { width: 26px; height: 31px; image-rendering: pixelated; flex-shrink: 0; }
+.gameCardBadge { width: 28px; height: 28px; flex-shrink: 0; }
+.gameCardRing { flex-shrink: 0; display: grid; place-items: center; }
+.gameCardBody { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.gameCardLabel {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+}
+.gameCardNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1;
+  color: #fff;
+}
+.gameCardNum em {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.5);
+}
+.gameCardName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: #fff;
+}
+.gameCardSub { font-size: 10.5px; font-weight: 600; color: rgba(255, 255, 255, 0.45); letter-spacing: 0; }
+.gameCardCta { font-size: 11px; font-weight: 700; color: var(--accent, #fff); letter-spacing: 0; }
+.gameCardTrack {
+  width: 120px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+  margin-top: 2px;
+}
+.gameCardFill {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: #ffd60a; /* yellow = in-progress */
+}
+
+/* Hero overlay (mobile reference): shade + logo + drop + theme on the photo */
+.heroShade,
+.heroOverlay { display: none; }
+.heroShade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.62) 0%,
+    rgba(0, 0, 0, 0.18) 38%,
+    rgba(0, 0, 0, 0.10) 55%,
+    rgba(0, 0, 0, 0.78) 100%
+  );
+}
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 16px 12px;
+}
+.heroLogo { width: clamp(140px, 38vw, 200px); height: auto; display: block; }
+/* Phones: the 5-for-5 lockup in the nav now carries the brand, so drop the
+   redundant big scoreboard logo from the hero (2026-06-17). */
+@media (max-width: 600px) { .heroLogo { display: none; } }
+/* Theme eyebrow on the hero: white label (not a signal color), gray date */
+.heroEyebrow {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+.heroEyebrow span { color: rgba(255, 255, 255, 0.55); font-weight: 600; }
+.heroBottom {
+  margin-top: auto;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
+  gap: 4px;
+}
+.heroTheme {
+  font-family: var(--font-inter), sans-serif;
+  font-weight: 800;
+  font-size: clamp(30px, 8.6vw, 38px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.6);
+}
+
+/* Desktop arrangement: copy | hero side by side, cards row below */
+@media (min-width: 1024px) {
+  .cabinetContent {
+    align-items: stretch;
+    text-align: left;
+    justify-content: flex-start;
+    padding: clamp(20px, 2.4vw, 36px) clamp(20px, 2.6vw, 40px);
+  }
+  /* Figma 326:6681 — hero LEFT (388px panel), copy RIGHT. The image and the
+     copy block (logo → "HOW IT WORKS?") are vertically centered relative to
+     each other; cabinetMain flex-grows so the game cards below pin to the
+     cabinet bottom, leaving flexible space between the two sections. */
+  .cabinetMain {
+    display: grid;
+    grid-template-columns: clamp(260px, 34%, 388px) minmax(0, 1fr);
+    gap: clamp(24px, 2.8vw, 42px);
+    align-items: center;
+    flex: 1 1 auto;
+  }
+  .cabinetHero { order: -1; align-self: center; }  /* photo column first (left) */
+  .cabinetCopy { justify-content: center; gap: clamp(22px, 2.4vw, 40px); }
+  .gameCards { margin-top: auto; }      /* pin cards to the bottom */
+  .quizLogo { width: clamp(240px, 24vw, 355px); }
+  .themeSub { font-size: 16px; }
+  .theme {
+    font-size: clamp(38px, 3.6vw, 60px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+  .streakStrip { display: none; }       /* superseded by .gameCards */
+  .challengedBanner { align-self: flex-start; }
+
+  /* Clean image panel (Figma) — sharp corners, no full-bleed, no edge
+     gradients. Box tracks the asset's native 388:695 ratio so the full image
+     shows uncropped ("as is"); bottom-aligned to the copy column. */
+  .cabinetHero {
+    border-radius: 0;
+    align-self: center;
+    width: 100%;
+    aspect-ratio: 388 / 695;
+    height: auto;
+    margin: 0;
+    min-height: 0;
+  }
+  .cabinetHeroImg {
+    object-fit: cover;
+    object-position: center;
+  }
+}
+
+/* Mobile arrangement: hero leads, copy follows, compact strip stays.
+   Tight budget — the cabinet shares 100dvh with the peek sheet, so the
+   checklist REPLACES the sub line and the under-START sign-in (the strip's
+   streak cell already routes guests to auth). */
+@media (max-width: 1023px) {
+  .gameCards { display: none; }
+  .cabinetMain { gap: 28px; }                /* Figma 326:7107 — hero → copy */
+  .cabinetContent { padding: 17px; }
+  .cabinetCopy { align-items: flex-start; text-align: left; gap: 14px; width: 100%; }
+  /* Figma mobile: clean hero image (no overlay); eyebrow + title + sub sit
+     BELOW it. Only the big logo is dropped (the nav lockup carries the brand). */
+  .cabinetCopy .quizLogo { display: none; }
+  /* Sharp-cornered clean image, inset within the cabinet padding (no bleed),
+     tracking the mobile asset's 356:195 ratio so it shows uncropped. */
+  .cabinetHero {
+    order: -1;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    aspect-ratio: 356 / 195;
+  }
+  .cabinetHero .photoCredit { display: none; }
+  .themeSub { display: block; font-size: 14px; line-height: 1.5; max-width: none; }
+  .startQuiz { padding: 15px 24px; font-size: 15px; border-radius: 0; }
+  .signInSave { display: none; }
+  .theme { text-align: left; font-size: clamp(30px, 9vw, 36px); letter-spacing: -0.033em; margin: 0; }
+  .streakStripCol { padding: 10px 18px; gap: 3px; }
+  .streakStripNum { font-size: 26px; }
+  /* crucial on mobile (user call) — compact, centered under START */
+  .howItWorks { margin-top: 2px; font-size: 11.5px; align-self: center; }
+}
+
+/* ═══ MOBILE: LEADERBOARD SITS UNDER THE CABINET (2026-06-13, Anusha) ═══
+   The leaderboard used to ride as a fixed 216px "peek" bottom-sheet pinned
+   over a 100dvh-locked cabinet. On a real iPhone the Safari URL bar shrinks
+   the usable viewport, so the peek climbed up and covered the STREAK / BADGES
+   strip. Replaced with plain document flow: cabinet first (strip always
+   visible at its base), the full leaderboard directly below it, footer last.
+   Nothing is viewport-height-locked, so it adapts to any iPhone (13/14/Pro
+   Max) with the URL bar shown or hidden. Declared last so it wins the cascade
+   over the earlier mobile lock rules. */
+@media (max-width: 1023px) {
+  /* page + grid + column scroll naturally instead of locking to 100dvh */
+  .page {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+    padding: 60px 8px 0;
+  }
+  .grid {
+    height: auto;
+    overflow: visible;
+    gap: 14px;
+    padding: 0 0 8px;
+  }
+  .leftCol {
+    height: auto;
+    overflow: visible;
+  }
+  /* Cabinet sizes to its content — the streak/badges strip can never be
+     squeezed off-screen or hidden behind an overlay now. */
+  .cabinet {
+    flex: none;
+    aspect-ratio: auto;
+    min-height: 0;
+    height: auto;
+  }
+  /* The inner column must size to its content too — when the cabinet was
+     viewport-locked, .cabinetMain used `flex: 1 1 0; min-height: 0` to fill
+     it; in plain flow that collapses to nothing (hero + copy disappear). */
+  .cabinetContent { height: auto; }
+  .cabinetMain {
+    flex: none;
+    min-height: auto;
+  }
+  /* Hero sizes by the mobile asset's ratio in flow (clean image, no overlay). */
+  .cabinetHero {
+    flex: none;
+    width: 100%;
+    aspect-ratio: 356 / 195;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+  }
+  /* The leaderboard rail renders inline, directly below the cabinet. */
+  .sidebar {
+    display: flex !important;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+    padding: 18px 14px;
+    gap: 18px;
+  }
+  /* Top 3 stays compact so all three cards fit any phone width. */
+  .podium {
+    gap: 6px;
+    padding-top: 18px;
+  }
+  /* Footer closes the page (it used to live inside the now-removed sheet). */
+  .footerBleed {
+    display: block;
+    margin: 20px -8px 0;
+  }
+}
+
+@media (max-width: 380px) {
+  /* Smallest iPhones (SE/13 mini): trim the podium so the gold card + both
+     side cards never collide. */
+  .sidebar { padding: 16px 10px; }
+  .podiumEntryGold .podiumAvatar { width: 56px; height: 56px; }
+  .podiumEntrySm .podiumAvatar { width: 46px; height: 46px; }
+  .podiumEntryXs .podiumAvatar { width: 42px; height: 42px; }
+  .podiumScore { font-size: 16px; }
+  .podiumEntryGold .podiumScore { font-size: 19px; }
+}

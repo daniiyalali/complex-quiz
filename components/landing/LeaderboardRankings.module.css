@@ -1,0 +1,177 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: var(--l-r-card);
+  box-shadow: var(--l-shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+/* ─── Header ─── */
+.headRow {
+  display: grid;
+  grid-template-columns: 28px 36px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px 11px;
+  border-bottom: 1px solid var(--l-divider);
+}
+.headRank,
+.headName,
+.headScore,
+.headTime {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--l-text-3);
+}
+.headRank { text-align: center; }
+.headSpacer { width: 36px; }
+.headScore,
+.headTime { text-align: right; min-width: 48px; }
+
+/* ─── List ─── */
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 28px 36px 1fr auto auto;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 18px;
+  border-bottom: 1px solid var(--l-divider);
+  transition: background var(--dur-snap) var(--spring-clean);
+}
+.row:last-child { border-bottom: none; }
+.row:hover { background: var(--l-surface-2); }
+
+.rank {
+  font-family: var(--font-doto), Doto, ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--l-text-2);
+  text-align: center;
+  line-height: 1;
+}
+
+.avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--l-surface-3);
+  color: var(--l-text);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0;
+  border: 1px solid var(--l-border);
+}
+
+.name {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--l-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.score {
+  font-family: var(--font-doto), Doto, ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--l-text);
+  text-align: right;
+  min-width: 48px;
+  line-height: 1;
+}
+.scoreDenom {
+  color: var(--l-text-3);
+  font-size: 12px;
+}
+
+.time {
+  font-family: var(--font-doto), Doto, ui-monospace, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--l-text-2);
+  text-align: right;
+  min-width: 48px;
+  line-height: 1;
+}
+
+/* ─── Top-3 emphasis ─── */
+.row.gold {
+  background: var(--l-accent-soft, rgba(0, 0, 0, 0.05));
+}
+.row.gold:hover { background: var(--l-accent-soft, rgba(0, 0, 0, 0.07)); }
+.row.gold .rank,
+.row.gold .name,
+.row.gold .score {
+  color: var(--l-text);
+}
+.row.gold .rank { font-size: 17px; }
+
+.avatar.gold {
+  background: var(--l-accent, var(--l-text));
+  color: var(--l-accent-contrast, var(--l-bg));
+  border-color: var(--l-accent, var(--l-text));
+  box-shadow: var(--l-shadow-sm);
+}
+.avatar.silver {
+  border-color: var(--l-border-strong);
+  border-width: 2px;
+}
+.avatar.bronze {
+  border-color: var(--l-border-strong);
+  border-width: 1.5px;
+}
+.row.silver .rank,
+.row.bronze .rank { color: var(--l-text); }
+
+/* ─── Sticky "you" ─── */
+.youDock {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  padding: 6px;
+  background: linear-gradient(
+    to top,
+    var(--l-surface) 55%,
+    color-mix(in srgb, var(--l-surface) 0%, transparent)
+  );
+}
+.youRow {
+  border-radius: var(--l-r-chip);
+  border: 1.5px solid var(--l-accent, var(--l-text));
+  background: var(--l-accent-soft, rgba(0, 0, 0, 0.06));
+  padding: 12px 14px;
+}
+.youRow:hover { background: var(--l-accent-soft, rgba(0, 0, 0, 0.08)); }
+.youRow .rank,
+.youRow .name,
+.youRow .score { color: var(--l-text); }
+.youRow .avatar {
+  background: var(--l-accent, var(--l-text));
+  color: var(--l-accent-contrast, var(--l-bg));
+  border-color: var(--l-accent, var(--l-text));
+}

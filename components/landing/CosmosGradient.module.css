@@ -1,0 +1,31 @@
+/* Cosmos spectrum branding wash. Fills its positioned parent, sits low, drifts
+   slowly. The PixelBlast dot layer (HeroBackdrop) renders on top of this. */
+
+.wrap {
+  position: absolute;
+  inset: -8% -6% auto -6%;
+  height: 115%;
+  pointer-events: none;
+  opacity: 0.5;
+  -webkit-mask-image: radial-gradient(ellipse 86% 80% at 50% 62%, #000 6%, transparent 76%);
+  mask-image: radial-gradient(ellipse 86% 80% at 50% 62%, #000 6%, transparent 76%);
+  animation: cosmosDrift 26s ease-in-out infinite alternate;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Dark mode: gradient pops harder on black, dial opacity up a touch. */
+:global(.lightRoot[data-mode="dark"]) .wrap { opacity: 0.62; }
+
+@keyframes cosmosDrift {
+  from { transform: translate3d(0, 0, 0) scale(1.02); }
+  to   { transform: translate3d(0, -3%, 0) scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wrap { animation: none; }
+}

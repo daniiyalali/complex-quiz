@@ -1,0 +1,161 @@
+/* SheetModal — shared Streak & Badges overlay shell.
+   Mobile: bottom sheet (drag-dismiss). Desktop ≥1024px: centered pop-up.
+   Mirrors StreakDrawer so every "panel" overlay in the experience matches. */
+
+.root {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  pointer-events: none;
+}
+.rootOpen {
+  pointer-events: auto;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(12px) saturate(100%);
+  -webkit-backdrop-filter: blur(12px) saturate(100%);
+  opacity: 0;
+  transition: opacity 200ms ease-out;
+}
+.rootOpen .overlay {
+  opacity: 1;
+}
+.root:not(.rootOpen) .overlay {
+  transition: opacity 200ms var(--ease-dismiss);
+}
+
+.panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 84vh;
+  background: #000;
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  transform: translateY(100%);
+  transition: transform var(--dur-fast) var(--spring-clean);
+  color: var(--text);
+  font-family: var(--font-inter), Inter, sans-serif;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  will-change: transform;
+}
+.rootOpen .panel {
+  transform: translateY(0);
+}
+.root:not(.rootOpen) .panel {
+  transition: transform var(--dur-fast) var(--ease-dismiss);
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .panel {
+    left: 50%;
+    right: auto;
+    width: min(580px, 92vw);
+    transform: translate(-50%, 100%);
+  }
+  .rootOpen .panel {
+    transform: translate(-50%, 0);
+  }
+}
+
+/* Desktop: centered modal — all corners rounded, no drag handle. */
+@media (min-width: 1024px) {
+  .panel {
+    top: 50%;
+    bottom: auto;
+    left: 50%;
+    right: auto;
+    width: min(620px, 92vw);
+    height: min(760px, 90vh);
+    border-radius: var(--radius-sheet);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    transform: translate(-50%, -50%) scale(0.94);
+    opacity: 0;
+    transition:
+      opacity var(--dur-fast) var(--spring-clean),
+      transform var(--dur-fast) var(--spring-clean);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(0, 0, 0, 0.06);
+  }
+  .rootOpen .panel {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  .handleHit {
+    display: none !important;
+  }
+}
+
+.handleHit {
+  width: 100%;
+  padding: 10px 0 4px;
+  display: flex;
+  justify-content: center;
+  touch-action: none;
+  cursor: grab;
+  flex-shrink: 0;
+}
+.handleHit:active {
+  cursor: grabbing;
+}
+.handle {
+  width: 36px;
+  height: 4px;
+  background: rgba(84, 84, 88, 0.55);
+  border-radius: 2px;
+}
+
+/* Close — circular pill top-right, matching every other panel overlay. */
+.close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 28px;
+  height: 28px;
+  background: var(--surface-2);
+  border: 0;
+  border-radius: 50%;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 16px;
+  line-height: 1;
+  color: var(--text-2);
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    transform var(--dur-snap) var(--spring-snap),
+    background var(--dur-snap) var(--spring-clean),
+    color var(--dur-snap) var(--spring-clean);
+}
+.close:hover {
+  background: var(--chip);
+  color: var(--text);
+}
+.close:active {
+  transform: scale(0.92);
+}
+
+/* Body fills the panel; the child (ProfilePanel) owns its own internal scroll. */
+.body {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel,
+  .overlay {
+    transition: none;
+  }
+}

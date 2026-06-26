@@ -1,0 +1,20 @@
+/* Fills its positioned parent. Sits above the screen's base/photo, below the
+   oval frame + card. The static-dot fallback uses the same Volt so the look is
+   consistent whether or not WebGL is available. */
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+.layer > * {
+  width: 100%;
+  height: 100%;
+}
+.staticDots {
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle, var(--led-dot, #FFFFFF) 1.1px, transparent 1.7px);
+  background-size: 15px 15px;
+  opacity: 0.5;
+}

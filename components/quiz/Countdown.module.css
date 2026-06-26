@@ -1,0 +1,99 @@
+.wrap {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #000;
+  color: #fff;
+  z-index: 100;
+}
+
+/* Overlay variant — sits on top of the home screen with a strong dim so the
+   countdown text reads loud while the start screen is still suggested behind. */
+.wrapOverlay {
+  background: rgba(0, 0, 0, 0.78);
+  z-index: 500;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  animation: cd-overlay-in 200ms ease-out both;
+}
+@keyframes cd-overlay-in {
+  from { background: rgba(0, 0, 0, 0); backdrop-filter: blur(0); }
+  to   { background: rgba(0, 0, 0, 0.78); backdrop-filter: blur(3px); }
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
+
+.num {
+  font-family: var(--font-anton), "Anton", "Arial Black", sans-serif;
+  font-size: clamp(140px, 24vw, 280px);
+  font-weight: 900;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: #fff;
+  display: inline-block;
+  animation: cd-slam 0.65s var(--spring-bounce) both;
+}
+
+@keyframes cd-slam {
+  0%   { opacity: 0; transform: scale(0.4) translateY(-40px); }
+  55%  { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .num { animation: none; }
+}
+@keyframes cd-pixel-pop {
+  0%   { opacity: 0; transform: scale(0.5); }
+  25%  { opacity: 1; transform: scale(1.2); }
+  50%  { opacity: 1; transform: translate(-3px, 2px) scale(1.1); }
+  75%  { opacity: 1; transform: translate(3px, -2px) scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+:global(html[data-theme="3"]) .wrap {
+  background: #000;
+}
+:global(html[data-theme="3"]) .wrapOverlay {
+  background: #000 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+}
+:global(html[data-theme="3"]) .kicker {
+  font-family: var(--font-inter), Inter, sans-serif;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0;
+  font-weight: 600;
+}
+:global(html[data-theme="3"]) .num {
+  font-family: var(--font-doto), Doto, "Press Start 2P", monospace !important;
+  font-size: clamp(140px, 26vw, 320px);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.02em;
+  text-shadow: none;
+  line-height: 0.85;
+  animation: cd-doto-pop 0.65s var(--spring-bounce) both;
+}
+/* GO = the green light (gaming signal language) */
+:global(html[data-theme="3"]) .num[data-go] {
+  color: var(--correct, #00ff85);
+  text-shadow: 0 0 36px rgba(0, 255, 133, 0.55), 0 0 90px rgba(0, 255, 133, 0.25);
+}
+
+@keyframes cd-doto-pop {
+  0%   { opacity: 0; transform: scale(0.55) translateY(-40px); }
+  55%  { opacity: 1; transform: scale(1.12); }
+  100% { opacity: 1; transform: scale(1); }
+}
+

@@ -1,0 +1,28 @@
+/* Signature dot-matrix layer behind the light hero. Sits above the gold glow
+   (z 1) but below content (z 2). Masked so it fades out toward the edges and
+   never competes with the headline. Kept faint — a branding texture, not art. */
+
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.16;
+  -webkit-mask-image: radial-gradient(ellipse 78% 64% at 50% 26%, #000 8%, transparent 74%);
+  mask-image: radial-gradient(ellipse 78% 64% at 50% 26%, #000 8%, transparent 74%);
+}
+
+.layer > * { width: 100%; height: 100%; }
+
+/* Cheap first-paint texture before the WebGL field lazy-loads (and the
+   reduced-motion permanent state). A static graphite dot grid. */
+.staticDots {
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(var(--l-text) 1.1px, transparent 1.2px);
+  background-size: 16px 16px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer { opacity: 0.1; }
+}

@@ -1,0 +1,554 @@
+/* ProfilePanel — Editorial-styled right rail */
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  background: #000;
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+
+.railHead {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+/* Player-profile mode: the whole header is the way back to the leaderboard */
+.railHeadRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+/* Top-right toggle back to the leaderboard — same UI as the leaderboard's
+   "Profile & badges →" button (mirror header, 2026-06-17). */
+.headBackBtn {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 11px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 0;
+  color: #fff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background 160ms var(--spring-clean), border-color 160ms var(--spring-clean);
+}
+.headBackBtn:hover { background: rgba(255, 255, 255, 0.14); border-color: rgba(255, 255, 255, 0.32); }
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: #fff;
+  cursor: pointer;
+}
+.backChip {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-chip, 8px);
+  font-size: 16px;
+  line-height: 1;
+  transition: border-color 160ms var(--spring-clean), background 160ms var(--spring-clean);
+}
+.backLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.backBtn:hover .backChip {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+.backBtn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+.railTitle {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: #fff;
+  line-height: 1.15;
+  display: block;
+}
+
+.scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 18px 20px 22px;
+}
+.scroll::-webkit-scrollbar { width: 6px; }
+.scroll::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); }
+
+/* Guest locked teaser — blurred profile behind a sign-in overlay */
+.blurred {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+.lockOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-align: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.55);
+}
+.lockGlyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--surface, #1c1c1e);
+  border: 1px solid var(--border, rgba(84, 84, 88, 0.45));
+  color: var(--accent, #ffd000);
+  margin-bottom: 4px;
+}
+.lockHeadline {
+  margin: 0;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: clamp(20px, 4vw, 26px);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+.lockSub {
+  margin: 0;
+  max-width: 30ch;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+}
+.lockCta {
+  margin-top: 8px;
+  min-width: 200px;
+  padding: 12px 20px;
+  border-radius: var(--radius-btn, 10px);
+  border: 0;
+  background: var(--accent, #ffd000);
+  color: #000;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.01em;
+  cursor: pointer;
+  transition: transform var(--dur-snap, 200ms) var(--spring-snap, cubic-bezier(0.34, 1.9, 0.64, 1));
+}
+.lockCta:active {
+  transform: scale(0.97);
+}
+@media (prefers-reduced-motion: reduce) {
+  .lockCta:active {
+    transform: none;
+  }
+}
+
+/* ID row */
+.idRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  /* "Trophy header" treatment — a soft magenta glow radiating from behind the
+     avatar, fading across toward the name, over the standard dark surface.
+     Ties the identity block to the var(--accent) accent and matches the rounded
+     card language of the streak card below it. */
+  background:
+    radial-gradient(
+      120% 135% at 0% 50%,
+      rgba(255, 255, 255, 0.30) 0%,
+      rgba(255, 255, 255, 0.09) 38%,
+      rgba(255, 255, 255, 0) 70%
+    ),
+    var(--surface);
+  border: 0.5px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--radius-card);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-bottom: 18px;
+}
+/* Avatar + upload affordance. The whole thing is a <label> wrapping a hidden
+   file input, so a click anywhere (photo or pencil badge) opens the picker. */
+.avatarWrap {
+  position: relative;
+  flex-shrink: 0;
+  display: inline-block;
+  line-height: 0;
+  cursor: pointer;
+}
+.avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  object-fit: cover;
+  display: block;
+}
+.avatarEdit {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #000;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--surface);
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.45);
+  transition: transform var(--dur-snap, 200ms) var(--spring-snap, cubic-bezier(0.34, 1.9, 0.64, 1));
+}
+.avatarWrap:hover .avatarEdit,
+.avatarWrap:focus-within .avatarEdit {
+  transform: scale(1.1);
+}
+/* Visually hidden but still in the label so the click opens the file dialog. */
+.fileInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+.idBody {
+  flex: 1;
+  min-width: 0;
+}
+.nameWrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.name {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+}
+.nameInput {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--accent);
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+  outline: none;
+  width: 100%;
+}
+.editBtn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  padding: 7px;
+  background: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  transition: color 280ms cubic-bezier(0.16, 1, 0.3, 1), border-color 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.editBtn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  transform: translateX(-101%);
+  transition: transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+  pointer-events: none;
+}
+.editBtn:hover::before { transform: translateX(0); }
+.editBtn:hover { color: #000; border-color: #fff; }
+.joined {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* Streak section — transparent layout wrapper (no fill of its own). The hero
+   sits on the panel background and WeeklyCard carries the single surface,
+   exactly like the pre-quiz drawer. Removing the wrapper fill kills the
+   "double gray shade" (surface inside surface-2) the nested cards created. */
+/* ── Stat cards (HipHopIQ-style bento) ── */
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+.statCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 16px 8px 14px;
+  background: var(--surface, #1c1c1e);
+  border: 0.5px solid var(--border, rgba(84, 84, 88, 0.45));
+  border-radius: var(--radius-card-sm, 12px);
+  text-align: center;
+}
+.statIcon {
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+}
+.statIconFire {
+  color: #FF9500;
+}
+.statNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-size: clamp(22px, 5vw, 28px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: #fff;
+}
+.statLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1.2;
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+}
+
+/* ── Quiz history table ── */
+/* Another player's earned-badge preview (public profile) */
+.badgesBlock { margin-top: 22px; }
+.badgesTitle {
+  display: block;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.badgesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(74px, 1fr));
+  gap: 16px 10px;
+}
+.badgeTile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 7px;
+  min-width: 0;
+}
+.badgeName {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.2;
+  color: var(--text-2);
+}
+.badgesEmpty {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  color: var(--text-2);
+}
+
+.historyBlock {
+  /* Breathing room between the streak/badges panel above and the history. */
+  margin-top: 28px;
+  margin-bottom: 22px;
+}
+.historyTitle {
+  display: block;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-bottom: 10px;
+}
+.historyTable {
+  display: flex;
+  flex-direction: column;
+}
+.historyRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 0.7fr;
+  align-items: center;
+  padding: 9px 2px;
+  border-bottom: 0.5px solid var(--divider, rgba(84, 84, 88, 0.25));
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text, #fff);
+}
+.historyRow:last-child {
+  border-bottom: none;
+}
+.historyHead {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--text-3, rgba(235, 235, 245, 0.3));
+  text-transform: uppercase;
+  padding-bottom: 8px;
+}
+.historyDate {
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+}
+.historyScore {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-variant-numeric: tabular-nums;
+}
+.historyScorePerfect {
+  color: #FF9500;
+  font-weight: 800;
+}
+.historyFire {
+  color: #FF9500;
+}
+.historyTime {
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+  font-variant-numeric: tabular-nums;
+}
+.historyRankCol {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.historyMore {
+  width: 100%;
+  margin-top: 12px;
+  padding: 10px;
+  background: transparent;
+  border: 0.5px solid var(--border, rgba(84, 84, 88, 0.45));
+  border-radius: var(--radius-btn, 10px);
+  color: var(--text-2, rgba(235, 235, 245, 0.6));
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color var(--dur-snap, 200ms) ease, border-color var(--dur-snap, 200ms) ease;
+}
+.historyMore:hover {
+  color: var(--text, #fff);
+  border-color: var(--text-3, rgba(235, 235, 245, 0.3));
+}
+
+/* Trophy case */
+.trophyBlock {
+  margin-bottom: 18px;
+}
+.trophyKicker {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  letter-spacing: 0;
+  color: var(--accent);
+  text-transform: uppercase;
+  font-weight: 800;
+  margin-bottom: 16px;
+  display: block;
+}
+/* Badge grid styles now live in BadgeTrophyGrid.module.css — the grid is a
+   shared component rendered identically here and in the StreakDrawer. */
+
+/* Privacy */
+.privacyRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(255, 255, 255, 0.20);
+  background: transparent;
+  padding: 14px;
+  gap: 12px;
+}
+.privacyLabel {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: #fff;
+}
+.privacySub {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 9px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-top: 3px;
+}
+.toggle {
+  width: 48px;
+  height: 24px;
+  border: 1.5px solid rgba(255, 255, 255, 0.30);
+  background: transparent;
+  position: relative;
+  cursor: pointer;
+  transition: all 160ms;
+  flex-shrink: 0;
+}
+.toggleOn {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+.toggleDot {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  transition: left 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.toggleOn .toggleDot { left: 26px; background: #fff; }

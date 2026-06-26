@@ -1,0 +1,128 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.title {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--l-text-2);
+}
+.count {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.countNum {
+  font-family: var(--font-doto), Doto, ui-monospace, monospace;
+  font-size: 15px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  color: var(--l-text);
+  line-height: 1;
+}
+.countOf {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--l-text-3);
+}
+.countLbl {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  color: var(--l-text-3);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 13px;
+  background: var(--l-surface);
+  border: 1px solid var(--l-border);
+  border-radius: var(--l-r-chip);
+  box-shadow: var(--l-shadow-sm);
+  transition: box-shadow var(--dur-fast) var(--spring-clean),
+    border-color var(--dur-fast) var(--spring-clean);
+}
+.card:hover { box-shadow: var(--l-shadow-hover); }
+.card.locked { opacity: 0.45; }
+.card.locked .art { filter: grayscale(1); }
+
+.artWrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.stateBadge {
+  position: absolute;
+  bottom: -3px;
+  right: -4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid var(--l-surface);
+}
+.stateEarned {
+  background: var(--l-correct, #34C759);
+  color: #fff;
+}
+.stateLocked {
+  background: var(--l-surface-3);
+  color: var(--l-text-3);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+.name {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0;
+  color: var(--l-text);
+  line-height: 1.15;
+}
+.criteria {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0;
+  color: var(--l-text-2);
+  line-height: 1.25;
+}

@@ -1,0 +1,67 @@
+/* Corner pixel accents for the question/answer screen — top-right +
+   bottom-left only, behind the question content (qLayout is z-index 2). */
+.layer {
+  /* Sits inside .qLayout (a z-index:2 stacking context): above the absolute
+     hero photo (z-index 0) but below the question content (z-index 2). Screen
+     blend lets the dots glint over the photo's dark regions in the top-right
+     and read on the black page in the bottom-left, while staying invisible on
+     the bright shoe and never washing out the question text. */
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.55;
+  /* Show the field only in the top-right and bottom-left corners; everything
+     else (where the question, timer, shoe and options sit) is masked out.
+     Two radial wedges, unioned — held at full strength deep into each corner
+     before fading, so the accent reads clearly rather than as a whisper. */
+  -webkit-mask-image:
+    radial-gradient(ellipse 58% 54% at 100% 0%, #000 0%, #000 30%, rgba(0, 0, 0, 0.55) 60%, transparent 88%),
+    radial-gradient(ellipse 58% 54% at 0% 100%, #000 0%, #000 30%, rgba(0, 0, 0, 0.55) 60%, transparent 88%);
+  mask-image:
+    radial-gradient(ellipse 58% 54% at 100% 0%, #000 0%, #000 30%, rgba(0, 0, 0, 0.55) 60%, transparent 88%),
+    radial-gradient(ellipse 58% 54% at 0% 100%, #000 0%, #000 30%, rgba(0, 0, 0, 0.55) 60%, transparent 88%);
+}
+
+/* Cheap static texture for first paint / reduced-motion / no-WebGL. */
+.staticDots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    var(--led-dot, #ffffff) 1px,
+    transparent 1.6px
+  );
+  background-size: 16px 16px;
+  opacity: 0.5;
+}
+
+/* Mobile / tablet (single-column layout, options run full-width to the bottom):
+   drop the bottom-left wedge — it sat behind the options and hurt their
+   legibility. Keep only a tidy top-right corner dab, sized in px so it stays
+   in the empty header zone no matter how tall the scrolling layout gets. */
+@media (max-width: 1023px) {
+  .layer {
+    -webkit-mask-image:
+      radial-gradient(ellipse 300px 300px at 100% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.5) 64%, transparent 90%);
+    mask-image:
+      radial-gradient(ellipse 300px 300px at 100% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.5) 64%, transparent 90%);
+  }
+  /* Reveal/result screen has no options at the bottom, so the bottom-left
+     accent is safe there — restore it alongside the top-right on mobile. */
+  .layer.mobileBoth {
+    -webkit-mask-image:
+      radial-gradient(ellipse 300px 300px at 100% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.5) 64%, transparent 90%),
+      radial-gradient(ellipse 300px 300px at 0% 100%, #000 0%, #000 34%, rgba(0, 0, 0, 0.5) 64%, transparent 90%);
+    mask-image:
+      radial-gradient(ellipse 300px 300px at 100% 0%, #000 0%, #000 34%, rgba(0, 0, 0, 0.5) 64%, transparent 90%),
+      radial-gradient(ellipse 300px 300px at 0% 100%, #000 0%, #000 34%, rgba(0, 0, 0, 0.5) 64%, transparent 90%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    opacity: 0.5;
+  }
+}

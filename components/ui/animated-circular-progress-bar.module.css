@@ -1,0 +1,58 @@
+/* Replaces the Tailwind utilities from the Magic UI registry version.
+   Tailwind classes mapped:
+     size-40           → width/height 10rem
+     text-2xl          → font-size 1.5rem
+     font-semibold     → font-weight 600
+     size-full         → 100% × 100%
+     absolute inset-0 m-auto size-fit → centered overlay
+     animate-in fade-in → simple opacity fade
+     duration-(--transition-length) → uses the same custom prop
+*/
+
+.wrap {
+  position: relative;
+  width: 10rem;
+  height: 10rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.svg {
+  width: 100%;
+  height: 100%;
+}
+
+.label {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: fit-content;
+  height: fit-content;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: progress-fade-in var(--transition-length, 1s) ease forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+.center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+@keyframes progress-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .label,
+  .svg circle {
+    transition: none !important;
+    animation: none !important;
+  }
+}

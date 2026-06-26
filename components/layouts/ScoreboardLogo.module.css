@@ -1,0 +1,91 @@
+.lockup {
+  display: flex;
+  flex-direction: column;
+  /* left-aligned by default (desktop cabinet copy column is left-aligned, so
+     the badge must sit flush with the text — not centered in its box). The
+     mobile hero overlay re-centers it below. */
+  align-items: flex-start;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Squarish 5-for-5 badge logo (replaces the old LED cells). The SVG carries
+   its own black field + white border, so it reads as a framed badge on the
+   dark cabinet. Width clamp lives here so the flap overlay scales with it. */
+.badge {
+  position: relative;
+  width: clamp(148px, 42%, 216px);
+  container-type: inline-size;
+}
+
+.logoImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---- Split-flap bottom plate (Mark's scoreboard direction) ----
+   Geometry derived from the SVG (viewBox 1268.16 × 1052): the bottom band
+   sits inside the 5.76-unit border, y 837.3 → 1046.2. The housing is black
+   so mid-flip you glimpse the dark slot, like a real arrivals board. */
+.flapScene {
+  position: absolute;
+  left: 0.45%;
+  top: 79.6%;
+  width: 99.1%;
+  height: 19.85%;
+  background: #000;
+  perspective: 520px;
+}
+
+.flap {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  /* spring-soft overshoots a few degrees past flat, reading as the flap's
+     physical settle "clack" — bounce would over-rotate and look broken */
+  transition: transform 680ms var(--spring-soft, cubic-bezier(0.34, 1.2, 0.64, 1));
+  will-change: transform;
+}
+
+.flipped {
+  transform: rotateX(-180deg);
+}
+
+.face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  font-family: var(--font-anton), var(--font-inter), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0; /* house rule: 0 or negative, never positive */
+  text-transform: uppercase;
+  line-height: 1;
+  font-size: 24px; /* fallback when container units are unsupported */
+  font-size: 12.5cqw;
+  padding-bottom: 0.06em; /* optical center — Anton rides low */
+}
+
+/* Rest state matches the baked plate: white bar, black type */
+.faceQuiz {
+  background: #fff;
+  color: #000;
+}
+
+/* Category takeover — flat poster red sampled from Mark's mock (#B3201E),
+   lifted slightly for dark-UI luminance. Logo artwork color, not a token. */
+.faceCategory {
+  background: #c2231f;
+  color: #fff;
+  transform: rotateX(180deg);
+}
+
+@media (max-width: 1023px) {
+  .lockup {
+    align-items: center;
+  }
+}

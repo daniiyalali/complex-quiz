@@ -1,0 +1,116 @@
+/* "Join 5 for 5" login — DARK shell (user call 2026-06-11: every popup in the
+   experience is dark; the old white Figma card broke immersion). Matches the
+   ShareCardModal shell: #0e0e10, hairline border, dim+blur scrim.
+   Desktop = centered modal; mobile = bottom sheet. */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  /* topmost interrupt — above BottomSheet (310), StreakDrawer (400) */
+  z-index: 460;
+  background: rgba(0, 0, 0, 0.72);
+  backdrop-filter: blur(10px) saturate(100%);
+  -webkit-backdrop-filter: blur(10px) saturate(100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: authFade 200ms var(--spring-clean);
+}
+@keyframes authFade { from { opacity: 0; } to { opacity: 1; } }
+
+.modal {
+  position: relative;
+  width: 400px;
+  max-width: 100%;
+  background: var(--surface, #1c1c1e);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 0;
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), 0 8px 16px -6px rgba(0, 0, 0, 0.5);
+  padding: 40px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-inter), Inter, sans-serif;
+  animation: authPop 240ms var(--spring-bounce);
+}
+@keyframes authPop { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+.close:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
+
+.head { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; margin-bottom: 24px; }
+.title { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; color: #fff; line-height: 1.15; }
+.sub { font-size: 12px; font-weight: 400; letter-spacing: 0; color: rgba(255, 255, 255, 0.55); line-height: 1.35; max-width: 30ch; }
+
+.social { display: flex; flex-direction: column; gap: 8px; }
+.socialBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  height: 44px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 160ms var(--spring-clean), border-color 160ms var(--spring-clean);
+}
+.socialBtn:hover { background: rgba(255, 255, 255, 0.08); border-color: rgba(255, 255, 255, 0.45); }
+
+.divider { display: flex; align-items: center; gap: 8px; margin: 16px 0; }
+.divider span { flex: 1; height: 1px; background: rgba(255, 255, 255, 0.14); }
+.divider { font-size: 10px; font-weight: 500; letter-spacing: 0; color: rgba(255, 255, 255, 0.45); }
+
+.actions { display: flex; gap: 8px; }
+.btnLight, .btnDark {
+  flex: 1;
+  height: 44px;
+  border-radius: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 160ms var(--spring-clean), background 160ms var(--spring-clean);
+}
+/* Secondary (LOG IN): outlined on dark. Primary (CREATE AN ACCOUNT): white —
+   white is the house accent, so the primary CTA inverts. */
+.btnLight { background: transparent; color: #fff; border: 1px solid rgba(255, 255, 255, 0.25); }
+.btnLight:hover { background: rgba(255, 255, 255, 0.08); }
+.btnDark { background: #fff; color: #000; border: none; }
+.btnDark:hover { background: #e6e6e6; }
+
+/* Mobile → bottom sheet */
+@media (max-width: 640px) {
+  .backdrop { align-items: flex-end; padding: 0; }
+  .modal {
+    width: 100%;
+    border-radius: 0;
+    padding: 28px 20px calc(20px + env(safe-area-inset-bottom));
+    animation: authSheet 280ms var(--spring-soft);
+  }
+  @keyframes authSheet { from { transform: translateY(100%); } to { transform: translateY(0); } }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .modal { animation: none; }
+}

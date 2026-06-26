@@ -1,0 +1,56 @@
+/* ─── Home ambient LED dot-matrix ──────────────────────────────────────────
+   A quiet echo of the BADGE UNLOCKED signature field, deliberately de-tuned
+   per the design council so it never twins the reward moment:
+     • Jony  — protect the ceremony; home is "almost not there"
+     • Brian — protect the accent; START is the only vivid yellow
+     • Andrew— protect time-to-interactive; static first, drift after idle
+     • Nikita— keep the badge screenshot unique; home reads as texture
+   ─────────────────────────────────────────────────────────────────────────── */
+
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  /* Home hero LED field (white). Raised per user direction (2026-06-10) so the
+     dot-matrix reads as the hero background, not a whisper. White pixels — Volt
+     stays reserved for the badge climax + START, so this doesn't twin the
+     reward moment despite the higher opacity. */
+  opacity: 0.3;
+  /* Recede behind the central content: dots stay present across the whole
+     canvas but dim toward the middle (where the cabinet + START sit) and read
+     strongest in the surrounding margins. A gentle dim, not a hard cut — the
+     home layout has thin margins, so a hard mask made the field disappear. */
+  -webkit-mask-image: radial-gradient(
+    ellipse 82% 84% at 50% 47%,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0.55) 32%,
+    #000 80%
+  );
+  mask-image: radial-gradient(
+    ellipse 82% 84% at 50% 47%,
+    rgba(0, 0, 0, 0.32) 0%,
+    rgba(0, 0, 0, 0.55) 32%,
+    #000 80%
+  );
+}
+
+/* Cheap, instant, GPU-light texture painted on first frame and as the
+   reduced-motion / pre-idle state. Uniform grid reads as LED panel, not as the
+   badge field's recognisable organic clustering. */
+.staticDots {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.5) 1px,
+    transparent 1.6px
+  );
+  background-size: 15px 15px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .layer {
+    opacity: 0.2;
+  }
+}

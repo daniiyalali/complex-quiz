@@ -1,0 +1,160 @@
+.card {
+  background: var(--surface-2, #2c2c2e);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px 16px;
+  margin-top: 8px;
+}
+
+.head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+.month {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  text-transform: uppercase;
+}
+.streakPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 149, 0, 0.14); /* orange — streak/fire semantic */
+}
+.flame {
+  width: 12px;
+  height: 14px;
+  display: block;
+  image-rendering: pixelated;
+}
+.streakNum {
+  font-family: var(--font-doto), Doto, monospace;
+  font-weight: 700;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--streak); /* orange */
+}
+
+.weekRow,
+/* Calendar = stacked week rows; each row is 7 day cells + the Strava-style
+   perfect-week rail cell on the right. */
+.grid {
+  display: flex;
+  flex-direction: column;
+  row-gap: 7px;
+}
+.weekCells,
+.weekRow {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr) 30px;
+  align-items: center;
+}
+.weekRow {
+  margin-bottom: 6px;
+}
+
+/* Perfect-week rail cell */
+.weekStatus {
+  width: 18px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+}
+.week_perfect {
+  /* gold = the perfect-week reward (all 7 played) */
+  background: #ffd60a;
+  box-shadow: 0 0 8px rgba(255, 214, 10, 0.45);
+}
+.week_open {
+  border: 1.5px dashed rgba(255, 255, 255, 0.22);
+}
+.week_none {
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+}
+.weekDay {
+  text-align: center;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  color: var(--text-3);
+  text-transform: uppercase;
+}
+
+/* Compact, spaced dots — Strava-style. Circles are smaller than the column so
+   they read as dots with breathing room, not a wall of filled tiles. */
+.cell,
+.empty {
+  width: clamp(26px, 6vw, 32px);
+  aspect-ratio: 1;
+  justify-self: center;
+}
+.cell {
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  position: relative;
+}
+.dateNum {
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-2);
+  line-height: 1;
+}
+.missX {
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  color: #000;
+}
+
+/* Traffic-light calendar (CEO gaming-signals direction, 2026-06-11):
+   green = done, YELLOW = today/"you're up", red = missed. Played-today keeps
+   the green fill inside a yellow halo. */
+.done {
+  background: var(--signal-deep);
+  border-color: var(--signal-deep);
+}
+.todayDone {
+  background: var(--signal-deep);
+  border-color: #ffd60a;
+  box-shadow: 0 0 0 2px #000, 0 0 0 4px #ffd60a, 0 0 12px rgba(255, 214, 10, 0.5);
+}
+.today {
+  background: transparent;
+  border-color: #ffd60a;
+  border-width: 2px;
+  box-shadow: 0 0 10px rgba(255, 214, 10, 0.5);
+}
+.today .dateNum {
+  color: #ffd60a;
+  font-weight: 700;
+}
+.missed {
+  background: var(--wrong);
+  border-color: var(--wrong);
+}
+.future .dateNum {
+  color: var(--text-3);
+}
+
+.foot {
+  margin-top: 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: var(--text-3);
+  text-align: center;
+}

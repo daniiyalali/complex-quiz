@@ -1,0 +1,88 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: #000;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: var(--gutter);
+  animation: cc-fade 0.25s var(--spring-clean);
+}
+@keyframes cc-fade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0;
+  color: #FFCC00;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.headline {
+  font-family: var(--font-anton), "Anton", sans-serif;
+  font-size: clamp(64px, 16vw, 132px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  color: #fff;
+  animation: cc-slam 0.7s var(--spring-bounce);
+}
+@keyframes cc-slam {
+  0%   { opacity: 0; transform: translateY(-60px) scale(0.6); }
+  60%  { opacity: 1; transform: translateY(0) scale(1.12); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+.sub {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0;
+  color: rgba(255, 255, 255, 0.55);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-top: 4px;
+}
+
+/* ═══════════ OPTION 3 — EDITORIAL ═══════════ */
+:global(html[data-theme="3"]) .overlay { background: #000; }
+:global(html[data-theme="3"]) .overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/figma/question-bg.png");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.35;
+  z-index: 0;
+}
+:global(html[data-theme="3"]) .kicker {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: var(--accent);
+  letter-spacing: 0;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+:global(html[data-theme="3"]) .headline {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: none;
+  font-size: clamp(60px, 12vw, 140px);
+  letter-spacing: -0.02em;
+  position: relative;
+  z-index: 1;
+}
+:global(html[data-theme="3"]) .sub {
+  font-family: var(--font-inter), Inter, sans-serif !important;
+  color: rgba(255, 255, 255, 0.62);
+  position: relative;
+  z-index: 1;
+}
+

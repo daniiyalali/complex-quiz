@@ -1,0 +1,224 @@
+/* Complex site footer — SMPLX "Mode=Dark", desktop (1440 spec) + mobile stack.
+   Spec values from Figma node 465-39204 (desktop) / 465-39203 (mobile):
+   black field, white headings, #8f959d link text, rgba dividers, 4px radii. */
+
+.footer {
+  position: relative;
+  /* above the Results shell (z 100) + its fixed sneaker-photo backdrop,
+     below the Playground bar (290) and modals (300+) */
+  z-index: 110;
+  background: #000;
+  color: #fff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.inner {
+  max-width: 1376px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+/* ── Section 1: wordmark + socials ── */
+.brandRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.wordmark { height: 40px; width: auto; display: block; }
+.socials { display: flex; align-items: center; gap: 16px; }
+.followOn { font-size: 14px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+.socialIcons { display: flex; align-items: center; gap: 32px; }
+.socialIcon { display: grid; place-items: center; width: 24px; height: 24px; transition: opacity 160ms var(--spring-clean); }
+/* Pixel sizes, never % — these SVGs come from Figma without intrinsic
+   dimensions; % on a replaced element falls back to the 300×150 default. */
+.socialIcon img { width: 20px; height: 20px; display: block; object-fit: contain; }
+.socialIcon:hover { opacity: 0.6; }
+
+/* ── Section 2: link columns + newsletter ── */
+.linksRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 12px 0;
+}
+.cols { display: flex; gap: 16px; flex: 1; }
+.col { display: flex; flex-direction: column; gap: 13px; width: 214px; }
+.colHead { font-size: 14px; font-weight: 700; letter-spacing: 0; color: #fff; }
+.colList { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.colLink {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  letter-spacing: 0;
+  color: #8f959d;
+  text-decoration: none;
+  transition: color 160ms var(--spring-clean);
+}
+.colLink:hover { color: #fff; }
+
+.newsletter { display: flex; flex-direction: column; gap: 16px; width: 559px; max-width: 100%; }
+.newsletterHead { font-size: 14px; font-weight: 700; letter-spacing: 0; text-transform: uppercase; }
+.emailRow {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border: 1px solid #adb1b7;
+  border-radius: 4px;
+  overflow: hidden;
+}
+.emailInput {
+  flex: 1;
+  min-width: 0;
+  height: 48px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.emailInput::placeholder { color: #8f959d; }
+.emailInput:focus { outline: 2px solid #fff; outline-offset: -2px; }
+.emailBtn {
+  flex-shrink: 0;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid #e1e3e5;
+  border-radius: 4px;
+  color: #000;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 160ms var(--spring-clean);
+}
+.emailBtn:hover { background: #e6e6e6; }
+.newsletterFine { font-size: 12px; font-weight: 500; line-height: 14px; letter-spacing: 0; color: #5a6069; text-transform: uppercase; }
+
+/* ── Section 3: legal links + region ── */
+.legalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.legalLinks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 40px;
+}
+.legalLink {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: 0;
+  color: #8f959d;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color 160ms var(--spring-clean);
+}
+.legalLink:hover { color: #fff; }
+.region {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 214px;
+  height: 40px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid #e1e3e5;
+  border-radius: 4px;
+  color: #fff;
+  font-family: var(--font-inter), Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+/* ── Section 4: copyright + accessibility ── */
+.bottomRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+.copyright {
+  max-width: 828px;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 14px;
+  letter-spacing: 0;
+  color: #8f959d;
+  margin: 0;
+}
+.a11y {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-decoration: none;
+}
+.a11y:hover { opacity: 0.7; }
+.a11yBadge {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+}
+.a11yBadge img { width: 12px; height: 16px; display: block; }
+
+/* ── Mobile stack (Figma 465-39203): heading-left / links-right rows ── */
+@media (max-width: 860px) {
+  .inner { padding: 40px 16px; gap: 20px; }
+  .brandRow { flex-direction: column; align-items: flex-start; gap: 20px; }
+  .wordmark { height: 32px; }
+  .socials { flex-direction: column; align-items: flex-start; gap: 12px; width: 100%; }
+  .socialIcons { gap: 0; width: 100%; justify-content: space-between; max-width: 360px; }
+  .linksRow { flex-direction: column; gap: 28px; padding: 4px 0; }
+  .cols { flex-direction: column; gap: 28px; width: 100%; }
+  .col {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: 0;
+    align-items: start;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  }
+  .col:last-child { border-bottom: none; padding-bottom: 0; }
+  .newsletter { width: 100%; }
+  .legalRow { flex-direction: column; align-items: stretch; gap: 20px; }
+  .legalLinks { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 24px; }
+  .region { width: 100%; }
+  .bottomRow { flex-direction: column; align-items: flex-start; gap: 20px; }
+}
