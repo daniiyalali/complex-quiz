@@ -29,6 +29,13 @@ orange = streak/fire · red = negative/stop/wrong/missed · white = chrome
 (e.g. no green focus rings, no green strokes on close buttons). Glyph
 contrast: black on green/yellow, white on red.
 
+## Score-card verdict colors (2026-06-27, Figma 326:7197)
+The post-quiz Results score number grades by score, on **4 tiers**:
+**5/5 `#00FF85`** · **4/5 `#00C46A`** · **3–2/5 `#FF9500`** · **1–0/5 `#FF453A`**.
+Driven by `data-grade` on `.scoreHeroNum` (`perfect` / `sharp` / `solid` /
+`rookie`). NOTE: 4/5 uses a distinct **darker** green `#00C46A`, *not* the 5/5
+signal green `#00FF85` — keep the two greens separate.
+
 ## Type ramp (2026-06-11, Anusha — grounded in Apple HIG + Airbnb practice)
 Inter everywhere; hierarchy comes from **size + weight, never case**.
 - **Editorial hero** (theme title, score): existing clamp display sizes — the only screaming text allowed; the brand mark outranks all UI headings.

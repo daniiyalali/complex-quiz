@@ -4,7 +4,48 @@ Next.js prototype for **Complex Daily**, a 5-question sneaker trivia game. The a
 
 ---
 
-## ✅ CURRENT STATE (read first — 2026-06-13)
+## ✅ CURRENT STATE (read first — 2026-06-27)
+
+### 2026-06-27 — Home cabinet redesign (Figma 326:6680 / 326:7107) + score-card verdict colors
+
+**Home cabinet (`EditorialLayout`) rebuilt to the new Figma. Scope was held to
+the Figma frame — the leaderboard sidebar, `GamesNav`, and `SiteFooter` were left
+untouched.**
+- **Layout flipped** to hero-LEFT / copy-RIGHT (was copy-left / gold-photo-right).
+  On desktop the hero image and the copy block (logo → "HOW IT WORKS?") are
+  vertically **centered relative to each other**; the hero **fills the column
+  height** (`align-self: stretch`, sharp corners, `object-fit: cover` — no dead
+  space). The streak/badge cards pin to the cabinet bottom with a fixed **24px**
+  gap (`.cabinetContent { gap: 24px }` in the ≥1024px block).
+- **New assets** (`public/figma/editorial/`): `hero-collabs.png` (388×695 green
+  halftone, desktop) + `hero-collabs-mobile.png` (356×195, mobile), served via a
+  `<picture>`. The gold photo (`sneaker-hero-gold.png`) and its photo-credit are
+  no longer used.
+- **Flat logo** `logo-5for5.png` replaces the animated `ScoreboardLogo` in the
+  cabinet AND in the `GamesNav` top bar on dark surfaces (was
+  `complex-5for5-horizontal.png`). `ScoreboardLogo.tsx` is now unused (left in
+  place for a focused cleanup later).
+- **Mobile** rebuilt to Figma 326:7107: a clean hero image (no logo/theme
+  overlay), with the eyebrow + title + subtitle sitting BELOW it.
+- **Played card** (`AlreadyPlayedCard`, inline variant only): added the dim
+  `TODAY · DONE` eyebrow and a `Go to Complex.com →` link; dropped the inline
+  "View results". The `/play` full-screen replay-lock (`screen` variant) is
+  unchanged.
+
+**Score-card verdict colors (Figma 326:7197):** the Results score number now
+grades on **4 tiers** — 5/5 `#00FF85` · 4/5 `#00C46A` · 3–2/5 `#FF9500` · 1–0/5
+`#FF453A` (was a 3-bucket win/close/loss scheme). See AGENTS.md → "Score-card
+verdict colors". New dev knob: **`/play?skip=results&score=N`** (0–5) seeds the
+synth score so each tier is reviewable (matches the `?skip=` / `?as=` conventions).
+
+**Deploy:** repo pushed to **`github.com/daniiyalali/complex-quiz`** (private),
+deploys to **Vercel** (native Next.js — the `force-dynamic` pages and the `/c`
+dynamic OG unfurl work as-is, no source changes). A `.gitignore` was added
+(excludes `node_modules`, `.next`, `.localnode`, `*.zip`, `next-env.d.ts`,
+`.claude/settings.local.json`). The push credential is stored in the macOS
+Keychain, so `git push` is seamless going forward.
+
+---
 
 This is the design + craft record for the prototype. For backend wiring, note
 that **all mock data + domain types live in `lib/`** — that directory is the

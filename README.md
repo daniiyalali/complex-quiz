@@ -32,6 +32,14 @@ npm run build    # production build (typechecks + compiles every CSS module)
 > `./.localnode/` is ~176 MB of binaries — delete it once Node is installed
 > system-wide. It is *not* a dependency of the app, just the local runtime.
 
+## Deploy
+
+Source lives at **`github.com/daniiyalali/complex-quiz`** (private) and deploys
+to **Vercel** — the native target for Next.js 16. Import the repo at
+`vercel.com/new`; it auto-detects the framework (build `next build`, no config
+needed). The `force-dynamic` pages and the `/c` dynamic OG-image unfurl
+(`next/og`) work as-is on Vercel — do **not** statically export them.
+
 ## Key routes
 
 - `/` — home cabinet + leaderboard
@@ -39,6 +47,11 @@ npm run build    # production build (typechecks + compiles every CSS module)
 - `/play` — the quiz flow (countdown → 5 questions → reveal → badge → results)
 - `/c` — challenge deep-link
 - `/preview/*` — dev-only component previews (strip before prod)
+
+**Dev query params** (QA shortcuts): `/play?skip=question|reveal|results|badge-unlock`
+jumps into a flow stage · `/play?skip=results&score=N` (N = 0–5) seeds the synth
+score to review each Results verdict-color tier · `/?as=guest|member|played`
+seeds the home visitor state.
 
 ## Layout
 
